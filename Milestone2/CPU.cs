@@ -2,8 +2,10 @@ namespace Milestone2;
 
 public class CPU
 {
+    Register[] MainMemory { get; set; } = new Register[100];
+    public Register Accumulator { get; set; } = new Register();
     // all commands
-    public void Read() 
+    public void Read()
     {
 
     }
@@ -19,21 +21,25 @@ public class CPU
     {
 
     }
-    public void Add() 
+    public void Add(int memoryAddress)
     {
-
+        int newVal = Accumulator.RegVal + MainMemory[memoryAddress].RegVal;
+        Accumulator.RegVal = newVal;
     }
-    public void Subtract()
+    public void Subtract(int memoryAddress)
     {
-
+        int newVal = Accumulator.RegVal + MainMemory[memoryAddress].RegVal;
+        Accumulator.RegVal = newVal;        
     }
-    public void Divide()
+    public void Divide(int memoryAddress)
     {
-
+        int newVal = Accumulator.RegVal / MainMemory[memoryAddress].RegVal;
+        Accumulator.RegVal = newVal;
     }
-    public void Multiply()
+    public void Multiply(int memoryAddress)
     {
-
+        int newVal = Accumulator.RegVal * MainMemory[memoryAddress].RegVal;
+        Accumulator.RegVal = newVal;
     }
     public void Branch()
     {
