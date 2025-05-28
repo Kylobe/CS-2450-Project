@@ -2,8 +2,6 @@ namespace Milestone2;
 
 public class UVSim
 {
-    Register[] MainMemory { get; set; } = new Register[100];
-    public Register Accumulator { get; set; } = new Register();
     public CPU CPU { get; set; } = new CPU();
     public void Load()
     {
@@ -37,22 +35,22 @@ public class UVSim
 
             if (currentRegister.FirstHalf == "30")
             {
-                // CPU.Add(SecondHalf, accumulator);
+                CPU.Add(int.Parse(currentRegister.SecondHalf));
             }
 
             if (currentRegister.FirstHalf == "31")
             {
-                // CPU.Subtract(SecondHalf, accumulator);
+                CPU.Subtract(int.Parse(currentRegister.SecondHalf));
             }
 
             if (currentRegister.FirstHalf == "32")
             {
-                // CPU.Divide(SecondHalf, accumulator);
+                CPU.Divide(int.Parse(currentRegister.SecondHalf));
             }
 
             if (currentRegister.FirstHalf == "33")
             {
-                // CPU.Multiply(SecondHalf, accumulator);
+                CPU.Multiply(int.Parse(currentRegister.SecondHalf));
             }
 
             if (currentRegister.FirstHalf == "40")
