@@ -1,7 +1,7 @@
 namespace Milestone2;
+
 public class UVSim
 {
-    public UVSim() { }
     public CPU CPU { get; set; } = new CPU();
     public void Load()
     {
@@ -12,7 +12,7 @@ public class UVSim
     {
         for (int i = 0; i < MainMemory.Length; i++)
         {
-            Register currentRegister = CPU.MainMemory[i] ?? new Register();
+            Register currentRegister = MainMemory[i] ?? new Register();
             if (currentRegister.FirstHalf == "10")
             {
                 // CPU.Read(SecondHalf);
@@ -73,5 +73,9 @@ public class UVSim
                 // CPU.Halt();
             }
         }
+    }
+    static Main[] ()
+    {
+        Run();
     }
 }
