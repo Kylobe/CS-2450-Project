@@ -16,10 +16,9 @@ public class Register
             string valStr = Math.Abs(value).ToString().PadLeft(4, '0');
             FirstHalf = valStr.Substring(0, 2);
             SecondHalf = valStr.Substring(2, 2);
-            regVal = value;
         }
     }
-    public Register(string value = "0000")
+    public Register(string value)
     {
         RegVal = int.Parse(value);
     }
