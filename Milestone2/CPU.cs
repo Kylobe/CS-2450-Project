@@ -2,8 +2,14 @@ namespace Milestone2;
 
 public class CPU
 {
-    Register[] MainMemory { get; set; } = new Register[100];
-    public Register Accumulator { get; set; } = new Register();
+    TraversableRegister[] MainMemory { get; set; }
+    public Register Accumulator { get; set; }
+
+    public CPU(TraversableRegister[] mainMemory, Register accumulator)
+    {
+        MainMemory = mainMemory;
+        Accumulator = accumulator;
+    }
     // all commands
     public void Read()
     {
@@ -41,20 +47,26 @@ public class CPU
         int newVal = Accumulator.RegVal * MainMemory[memoryAddress].RegVal;
         Accumulator.RegVal = newVal;
     }
-    public void Branch()
+    public TraversableRegister Branch(TraversableRegister currentRegister)
     {
-
+        currentRegister.Next = MainMemory[int.Parse(currentRegister.SecondHalf)];
+        return currentRegister;
     }
-    public void BranchNeg()
+    public TraversableRegister BranchNeg(TraversableRegister currentRegister)
     {
-
+        if (Accumulator.RegVal < 0) 
+            currentRegister.Next = MainMemory[int.Parse(currentRegister.SecondHalf)];
+        return currentRegister;
     }
-    public void BranchZero()
+    public TraversableRegister BranchZero(TraversableRegister currentRegister)
     {
-
+        if (Accumulator.RegVal == 0)
+            currentRegister.Next = MainMemory[int.Parse(currentRegister.SecondHalf)];
+        return currentRegister;
     }
-    public void Halt()
+    public TraversableRegister Halt(TraversableRegister currentRegister)
     {
-
+        currentRegister.Next = null;
+        return currentRegister;
     }
 }
