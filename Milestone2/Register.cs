@@ -13,9 +13,15 @@ public class Register
         }
         set
         {
-            string valStr = Math.Abs(value).ToString().PadLeft(4, '0');
+            int curVal = value;
+            while (Math.Abs(curVal) > 9999)
+            {
+                curVal /= 10;
+            }
+            string valStr = Math.Abs(curVal).ToString().PadLeft(4, '0');
             FirstHalf = valStr.Substring(0, 2);
             SecondHalf = valStr.Substring(2, 2);
+            regVal = curVal;
         }
     }
     public Register(string value)
