@@ -35,9 +35,9 @@ public class CPU
     {
 
     }
-    public void Store()
+    public void Store(int memoryAddress)
     {
-
+        MainMemory[memoryAddress].RegVal = Accumulator.RegVal;
     }
     public void Add(int memoryAddress)
     {
