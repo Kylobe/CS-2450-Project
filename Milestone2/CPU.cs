@@ -34,7 +34,7 @@ public class CPU
     }
     public void Subtract(int memoryAddress)
     {
-        int newVal = Accumulator.RegVal + MainMemory[memoryAddress].RegVal;
+        int newVal = Accumulator.RegVal - MainMemory[memoryAddress].RegVal;
         Accumulator.RegVal = newVal;        
     }
     public void Divide(int memoryAddress)
