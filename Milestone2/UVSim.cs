@@ -46,7 +46,7 @@ public class UVSim
                     CPU.Write(int.Parse(currentRegister.SecondHalf));
                     break;
                 case "20":
-                    // CPU.Load(SecondHalf, accumulator);
+                    CPU.Load(int.Parse(currentRegister.SecondHalf));
                     break;
                 case "21":
                     // CPU.Store(SecondHalf, accumulator);
