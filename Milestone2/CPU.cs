@@ -11,12 +11,22 @@ public class CPU
         Accumulator = accumulator;
     }
     // all commands
-    public void Read()
+    public void Read(int memoryAddress)
     {
+        int input;
+        //Ask for input
+        Console.Write($"Type value for memory location {memoryAddress:D2}: ");
+        while (!int.TryParse(Console.ReadLine(), out input))
+        {
+            Console.Write("Type an Integer: ");
+        }
+        //Store in memory 
+        MainMemory[memoryAddress].RegVal = input;
 
     }
-    public void Write() 
+    public void Write()
     {
+        
 
     }
     public void Load() 
