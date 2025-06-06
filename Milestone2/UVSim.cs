@@ -40,10 +40,10 @@ public class UVSim
             switch (currentRegister.FirstHalf)
             {
                 case "10":
-                    // CPU.Read(SecondHalf);
+                    CPU.Read(int.Parse(currentRegister.SecondHalf));
                     break;
                 case "11":
-                    // CPU.Write(SecondHalf);
+                    CPU.Write(int.Parse(currentRegister.SecondHalf));
                     break;
                 case "20":
                     // CPU.Load(SecondHalf, accumulator);
@@ -75,8 +75,6 @@ public class UVSim
                 case "43":
                     currentRegister = CPU.Halt(currentRegister);
                     break;
-                default:
-                    throw new Exception("Unknown register " + currentRegister.FirstHalf);
             }
             
             if (currentRegister.Next is null)

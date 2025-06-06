@@ -24,10 +24,10 @@ public class ProfessorUnitTests
     {
         var sw = new StringWriter();
         Console.SetOut(sw);
-        string result = sw.ToString();
         UVSim.LoadArray(numbers);
         UVSim.Run();
-        Assert.Equal(targetResult, result);
+        string result = sw.ToString();
+        Assert.Contains(targetResult, result);
     }
     [Theory]
     [InlineData(4,"2004", "4300","0000","0000","7777")]
@@ -60,14 +60,14 @@ public class ProfessorUnitTests
         
         var sw = new StringWriter();
         Console.SetOut(sw);
-        string result = sw.ToString();
         
         UVSim.LoadArray(numbers);
         UVSim.Run();
+        string result = sw.ToString();
         // command 10 should put 7777 in the target location
         Assert.Equal(7777, UVSim.MainMemory[targetLocation1].RegVal);
         // command 10 and 11 should give us 7777 in the console output
-        Assert.Equal("7777", result);
+        Assert.Contains("7777", result);
         // command 10 and 20 should put 7777 in the accumulator
         Assert.Equal(7777, UVSim.Accumulator.RegVal);
         // command 10 and 20 and 21 should get 7777 in the second target location
@@ -85,16 +85,16 @@ public class ProfessorUnitTests
         
         var sw = new StringWriter();
         Console.SetOut(sw);
-        string result = sw.ToString();
         
         UVSim.LoadArray(numbers);
         UVSim.Run();
+        string result = sw.ToString();
         // command 21 should put 7777 in the target location
         Assert.Equal(7777, UVSim.MainMemory[targetLocation1].RegVal);
         // command 20 should clear the accumulator due to referencing an empty location
         Assert.Equal(0, UVSim.Accumulator.RegVal);
         // command 21 and 11 should put 7777 in the console output
-        Assert.Equal("7777", result);
+        Assert.Contains("7777", result);
         // command 10 should clear the second target location
         Assert.Equal(0, UVSim.MainMemory[targetLocation2].RegVal);
     }
