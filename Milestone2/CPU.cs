@@ -24,9 +24,11 @@ public class CPU
         MainMemory[memoryAddress].RegVal = input;
 
     }
-    public void Write()
+    public void Write(int memoryAddress)
     {
-        
+        //Output Value of the given address
+        int value = MainMemory[memoryAddress].RegVal;
+        Console.WriteLine($"Value of memory {memoryAddress:D2}: {value}");
 
     }
     public void Load() 
