@@ -6,7 +6,7 @@ namespace xunitTest;
 public class ArithmeticTests
 {
     [Fact]
-    public void Add_ChangesAccumulatorCorrectly()
+    public void AddTest_Success()
     {
         TraversableRegister[] mainMemory = new TraversableRegister[100];
         Register accumulator = new Register("0000");
@@ -22,7 +22,7 @@ public class ArithmeticTests
         Assert.Equal(2, accumulator.RegVal);
     }
     [Fact]
-    public void Add_OverFlowsCorrectly()
+    public void AddOverFlowTest_Success()
     {
         TraversableRegister[] mainMemory = new TraversableRegister[100];
         Register accumulator = new Register("0000");
@@ -37,7 +37,7 @@ public class ArithmeticTests
         Assert.Equal(1000, accumulator.RegVal);
     }
     [Fact]
-    public void Subtract_ChangesAccumulatorCorrectly()
+    public void SubtractTest_Success()
     {
         TraversableRegister[] mainMemory = new TraversableRegister[100];
         Register accumulator = new Register("0000");
@@ -52,7 +52,7 @@ public class ArithmeticTests
         Assert.Equal(9, accumulator.RegVal);
     }
     [Fact]
-    public void Subtract_OverFlowsCorrectly()
+    public void SubtractOverFlowTest_Success()
     {
         TraversableRegister[] mainMemory = new TraversableRegister[100];
         Register accumulator = new Register("0000");
@@ -67,7 +67,7 @@ public class ArithmeticTests
         Assert.Equal(1000, accumulator.RegVal);
     }
     [Fact]
-    public void Multiply_ChangesAccumulatorCorrectly()
+    public void MultiplyTest_Success()
     {
         TraversableRegister[] mainMemory = new TraversableRegister[100];
         Register accumulator = new Register("0000");
@@ -82,7 +82,7 @@ public class ArithmeticTests
         Assert.Equal(20, accumulator.RegVal);
     }
     [Fact]
-    public void Multiply_OverFlowsCorrectly()
+    public void MultiplyOverFlowTest_Success()
     {
         TraversableRegister[] mainMemory = new TraversableRegister[100];
         Register accumulator = new Register("0000");
@@ -97,7 +97,7 @@ public class ArithmeticTests
         Assert.Equal(1000, accumulator.RegVal);
     }
     [Fact]
-    public void Divide_ChangesAccumulatorCorrectly()
+    public void DivideTest_Success()
     {
         TraversableRegister[] mainMemory = new TraversableRegister[100];
         Register accumulator = new Register("0000");
