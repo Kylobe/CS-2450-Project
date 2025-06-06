@@ -2,20 +2,25 @@ namespace Milestone2;
 
 public class UVSim
 {
-    private TraversableRegister[] MainMemory = new TraversableRegister[100];
-    private Register Accumulator = new Register("0000");
+    public TraversableRegister[] MainMemory = new TraversableRegister[100];
+    public Register Accumulator = new Register("0000");
     private CPU CPU { get; set; } 
-    public bool Done { get; set; } = false;
+    private bool Done { get; set; } = false;
     public UVSim()
     {
         CPU = new CPU(MainMemory, Accumulator);
     }
 
-    public void Load(string filePath)
+    public void LoadFile(string filePath)
     {
         string[] numbers = File.ReadAllLines(filePath)
             .Where(line => !string.IsNullOrWhiteSpace(line))
             .ToArray();
+        LoadArray(numbers);
+    }
+
+    public void LoadArray(string[] numbers)
+    {
         for (int i = 0; i < MainMemory.Length; i++)
         {
             if (i >= numbers.Length)
@@ -25,7 +30,6 @@ public class UVSim
 
         }
     }
-
     public void Run()
     {
         int i = 0;
