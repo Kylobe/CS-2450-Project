@@ -31,9 +31,9 @@ public class CPU
         Console.WriteLine($"Value of memory {memoryAddress:D2}: {value}");
 
     }
-    public void Load() 
+    public void Load(int memoryAddress) 
     {
-
+        Accumulator.RegVal = MainMemory[memoryAddress].RegVal;
     }
     public void Store()
     {
