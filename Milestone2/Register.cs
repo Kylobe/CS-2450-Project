@@ -28,4 +28,8 @@ public class Register
     {
         RegVal = int.Parse(value);
     }
+    public override string ToString()
+    {
+        return RegVal.ToString();
+    }
 }
