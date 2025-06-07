@@ -1,5 +1,6 @@
 using Milestone2;
 using Xunit.Abstractions;
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 
 namespace xunitTest;
 
@@ -83,7 +84,7 @@ public class ArithmeticTests
         Assert.Equal(3, uvSim.Accumulator.RegVal);
     }
     [Theory]
-    [InlineData("4\n3\n2\n1", "1050", "1150", "2050", "3110", "2150", "4110", "4210", "4303", "4300", "0001")]
+    [InlineData("Type value for memory location 50: Value of memory 50: 4\nValue of memory 50: 3\nValue of memory 50: 2\nValue of memory 50: 1\n", "1050", "1150", "2050", "3108", "2150", "4207", "4001", "4300", "0001")]
     public void ForLoopTest_Success(string targetResult, params string[] numbers)
     {
         var sw = new StringWriter();
@@ -92,8 +93,9 @@ public class ArithmeticTests
         Console.SetIn(new StringReader("4"));
         uvSim.LoadArray(numbers);
         uvSim.Run();
-        string result = sw.ToString();
-        Assert.Contains(targetResult, result);
+        string actual = sw.ToString().Replace("\r", "").Trim();
+        string expected = targetResult.Replace("\r", "").Trim();
+        Assert.Equal(expected, actual);
     }
 }
 
