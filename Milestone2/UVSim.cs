@@ -27,16 +27,20 @@ public class UVSim
                 MainMemory[i] = new TraversableRegister("0000");
             else
                 MainMemory[i] = new TraversableRegister(numbers[i]);
-
+        }
+        for (int i = 0; i < MainMemory.Length; i++)
+        {
+            if (i < MainMemory.Length - 1)
+            {
+                MainMemory[i].Next = MainMemory[i + 1];
+            }
         }
     }
     public void Run()
     {
-        int i = 0;
+        TraversableRegister currentRegister = MainMemory[0];
         while (!Done)
         {
-            TraversableRegister currentRegister = MainMemory[i];
-            currentRegister.Next = MainMemory[i++];
             switch (currentRegister.FirstHalf)
             {
                 case "10":
@@ -76,14 +80,15 @@ public class UVSim
                     currentRegister = CPU.Halt(currentRegister);
                     break;
             }
-            
+
             if (currentRegister.Next is null)
             {
                 Done = true;
             }
-            i = Array.IndexOf(MainMemory, currentRegister);
-            currentRegister = currentRegister.Next;
-            i++;
+            else
+            {
+                currentRegister = currentRegister.Next;
+            }
         }
     }
 }

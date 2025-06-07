@@ -82,5 +82,18 @@ public class ArithmeticTests
         uvSim.Run();
         Assert.Equal(3, uvSim.Accumulator.RegVal);
     }
+    [Theory]
+    [InlineData("4\n3\n2\n1", "1050", "1150", "2050", "3110", "2150", "4110", "4210", "4303", "4300", "0001")]
+    public void ForLoopTest_Success(string targetResult, params string[] numbers)
+    {
+        var sw = new StringWriter();
+        Console.SetOut(sw);
+        UVSim uvSim = new UVSim();
+        Console.SetIn(new StringReader("4"));
+        uvSim.LoadArray(numbers);
+        uvSim.Run();
+        string result = sw.ToString();
+        Assert.Contains(targetResult, result);
+    }
 }
 
