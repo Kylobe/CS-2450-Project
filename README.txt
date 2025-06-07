@@ -20,17 +20,23 @@ The following must be installed in order to run the program:
 
 - .NET SDK 6.0 or later
 
-2. Compile & Execute Program
-Before running the program, you must compile the project into an executable:
+2. Download the proper .zip file for your OS
 
-> dotnet build
+3. Open terminal and go to downloads directory
 
-3. Run Program
-From the same directory, run the command:
+4. Unzip file and enter file
 
-> dotnet run
+> unzip <file-name>.zip && cd <file-name>
 
-You will then be asked to input the path to your instructions file (ex: text1.txt)
+5. Grant permissions to run executable file
+
+> chmod +x Milestone2
+
+6. Run Milestone2 
+
+> ./Milestone2 <full path to file>
+
+You can also leave file path blank and in that case you will then be asked to input the path to your instructions file (ex: text1.txt)
 
 The Program will then execute the instructions line by line as written.
 
