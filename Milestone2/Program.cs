@@ -7,12 +7,10 @@ public class Program
     {
         UVSim uvSim = new UVSim();
         string filePath = string.Empty;
-        /*
         filePath = args.Length > 0 
             ? args[0] 
             : GetFilePath();
-        */
-        uvSim.LoadArray(["1050", "1150", "2050", "3108", "2150", "4207", "4001", "4300", "0001"]); 
+        uvSim.LoadFile(filePath); 
         uvSim.Run();
         Console.WriteLine("End of Program\nPress any key to exit...");
         Console.ReadKey();
