@@ -34,8 +34,8 @@ public class ProfessorUnitTests
     [InlineData(3,"2003","4300","0000","8888","0000")]
     public void LoadTest_Success(int targetLocation, params string[] numbers)
     {
-        Assert.NotEqual(UVSim.MainMemory[targetLocation].RegVal, UVSim.Accumulator.RegVal);
         UVSim.LoadArray(numbers);
+        Assert.NotEqual(UVSim.MainMemory[targetLocation].RegVal, UVSim.Accumulator.RegVal);
         UVSim.Run();
         Assert.Equal(UVSim.MainMemory[targetLocation].RegVal, UVSim.Accumulator.RegVal);
     }
@@ -44,9 +44,9 @@ public class ProfessorUnitTests
     [InlineData(3,"2103","4300","0000","0000","0000")]
     public void StoreTest_Success(int targetLocation, params string[] numbers)
     {
-        UVSim.Accumulator = new Register("7777");
-        Assert.NotEqual(UVSim.MainMemory[targetLocation].RegVal, UVSim.Accumulator.RegVal);
+        UVSim.Accumulator.RegVal = 7777;
         UVSim.LoadArray(numbers);
+        Assert.NotEqual(UVSim.MainMemory[targetLocation].RegVal, UVSim.Accumulator.RegVal);
         UVSim.Run();
         Assert.Equal(UVSim.MainMemory[targetLocation].RegVal, UVSim.Accumulator.RegVal);
     }
@@ -79,7 +79,7 @@ public class ProfessorUnitTests
         int targetLocation1 = 89;
         int targetLocation2 = 0;
         string[] numbers = ["2189", "2088", "1189", "1000", "4300"];
-        UVSim.Accumulator = new Register("7777");
+        UVSim.Accumulator.RegVal = 7777;
         
         Console.SetIn(new StringReader("0000\n"));
         
