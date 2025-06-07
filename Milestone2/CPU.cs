@@ -61,19 +61,35 @@ public class CPU
     }
     public TraversableRegister Branch(TraversableRegister currentRegister)
     {
-        currentRegister.Next = MainMemory[int.Parse(currentRegister.SecondHalf)];
+        TraversableRegister jumpedRegister = MainMemory[int.Parse(currentRegister.SecondHalf)];
+        if (jumpedRegister != null && jumpedRegister.Prev != null)
+        {
+            currentRegister = jumpedRegister.Prev;
+        }
         return currentRegister;
     }
     public TraversableRegister BranchNeg(TraversableRegister currentRegister)
     {
-        if (Accumulator.RegVal < 0) 
-            currentRegister.Next = MainMemory[int.Parse(currentRegister.SecondHalf)];
+        if (Accumulator.RegVal < 0)
+        {
+            TraversableRegister jumpedRegister = MainMemory[int.Parse(currentRegister.SecondHalf)];
+            if (jumpedRegister != null && jumpedRegister.Prev != null)
+            {
+                currentRegister = jumpedRegister.Prev;
+            }
+        }
         return currentRegister;
     }
     public TraversableRegister BranchZero(TraversableRegister currentRegister)
     {
         if (Accumulator.RegVal == 0)
-            currentRegister.Next = MainMemory[int.Parse(currentRegister.SecondHalf)];
+        {
+            TraversableRegister jumpedRegister = MainMemory[int.Parse(currentRegister.SecondHalf)];
+            if (jumpedRegister != null && jumpedRegister.Prev != null)
+            {
+                currentRegister = jumpedRegister.Prev;
+            }
+        }
         return currentRegister;
     }
     public TraversableRegister Halt(TraversableRegister currentRegister)

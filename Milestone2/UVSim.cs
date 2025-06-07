@@ -34,6 +34,16 @@ public class UVSim
             {
                 MainMemory[i].Next = MainMemory[i + 1];
             }
+            if (i != 0)
+            {
+                MainMemory[i].Prev = MainMemory[i - 1];
+            }
+            else
+            {
+                TraversableRegister head = new TraversableRegister("0000");
+                MainMemory[i].Prev = head;
+                head.Next = MainMemory[i];
+            }
         }
     }
     public void Run()
