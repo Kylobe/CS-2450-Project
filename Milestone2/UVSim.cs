@@ -1,76 +1,102 @@
 namespace Milestone2;
 public class UVSim
 {
-    public UVSim() { }
-    public CPU CPU { get; set; } = new CPU();
-    public void Load()
+    public TraversableRegister[] MainMemory = new TraversableRegister[100];
+    public Register Accumulator = new Register("0000");
+    private CPU CPU { get; set; } 
+    private bool Done { get; set; } = false;
+    public UVSim()
     {
-        // read file into Main memory
+        CPU = new CPU(MainMemory, Accumulator);
     }
 
-    public void Run()
+    public void LoadFile(string filePath)
+    {
+        string[] numbers = File.ReadAllLines(filePath)
+            .Where(line => !string.IsNullOrWhiteSpace(line))
+            .ToArray();
+        LoadArray(numbers);
+    }
+
+    public void LoadArray(string[] numbers)
     {
         for (int i = 0; i < MainMemory.Length; i++)
         {
-            Register currentRegister = CPU.MainMemory[i] ?? new Register();
-            if (currentRegister.FirstHalf == "10")
+            if (i >= numbers.Length)
+                MainMemory[i] = new TraversableRegister("0000");
+            else
+                MainMemory[i] = new TraversableRegister(numbers[i]);
+        }
+        for (int i = 0; i < MainMemory.Length; i++)
+        {
+            if (i < MainMemory.Length - 1)
             {
-                // CPU.Read(SecondHalf);
+                MainMemory[i].Next = MainMemory[i + 1];
+            }
+            if (i != 0)
+            {
+                MainMemory[i].Prev = MainMemory[i - 1];
+            }
+            else
+            {
+                TraversableRegister head = new TraversableRegister("0000");
+                MainMemory[i].Prev = head;
+                head.Next = MainMemory[i];
+            }
+        }
+    }
+    public void Run()
+    {
+        TraversableRegister currentRegister = MainMemory[0];
+        while (!Done)
+        {
+            switch (currentRegister.FirstHalf)
+            {
+                case "10":
+                    CPU.Read(int.Parse(currentRegister.SecondHalf));
+                    break;
+                case "11":
+                    CPU.Write(int.Parse(currentRegister.SecondHalf));
+                    break;
+                case "20":
+                    CPU.Load(int.Parse(currentRegister.SecondHalf));
+                    break;
+                case "21":
+                    CPU.Store(int.Parse(currentRegister.SecondHalf));
+                    break;
+                case "30":
+                    CPU.Add(int.Parse(currentRegister.SecondHalf));
+                    break;
+                case "31":
+                    CPU.Subtract(int.Parse(currentRegister.SecondHalf));
+                    break;
+                case "32":
+                    CPU.Divide(int.Parse(currentRegister.SecondHalf));
+                    break;
+                case "33":
+                    CPU.Multiply(int.Parse(currentRegister.SecondHalf));
+                    break;
+                case "40":
+                    currentRegister = CPU.Branch(currentRegister);
+                    break;
+                case "41":
+                    currentRegister = CPU.BranchNeg(currentRegister);
+                    break;
+                case "42":
+                    currentRegister = CPU.BranchZero(currentRegister);
+                    break;
+                case "43":
+                    currentRegister = CPU.Halt(currentRegister);
+                    break;
             }
 
-            if (currentRegister.FirstHalf == "11")
+            if (currentRegister.Next is null)
             {
-                // CPU.Write(SecondHalf);
+                Done = true;
             }
-
-            if (currentRegister.FirstHalf == "20")
+            else
             {
-                // CPU.Load(SecondHalf, accumulator);
-            }
-
-            if (currentRegister.FirstHalf == "21")
-            {
-                // CPU.Store(SecondHalf, accumulator);
-            }
-
-            if (currentRegister.FirstHalf == "30")
-            {
-                CPU.Add(int.Parse(currentRegister.SecondHalf));
-            }
-
-            if (currentRegister.FirstHalf == "31")
-            {
-                CPU.Subtract(int.Parse(currentRegister.SecondHalf));
-            }
-
-            if (currentRegister.FirstHalf == "32")
-            {
-                CPU.Divide(int.Parse(currentRegister.SecondHalf));
-            }
-
-            if (currentRegister.FirstHalf == "33")
-            {
-                CPU.Multiply(int.Parse(currentRegister.SecondHalf));
-            }
-
-            if (currentRegister.FirstHalf == "40")
-            {
-                // CPU.Branch(SecondHalf);
-            }
-
-            if (currentRegister.FirstHalf == "41")
-            {
-                // CPU.BranchNeg(SecondHalf, accumulator);
-            }
-
-            if (currentRegister.FirstHalf == "42")
-            {
-                // CPU.BranchZero(SecondHalf, accumulator);
-            }
-
-            if (currentRegister.FirstHalf == "43")
-            {
-                // CPU.Halt();
+                currentRegister = currentRegister.Next;
             }
         }
     }
