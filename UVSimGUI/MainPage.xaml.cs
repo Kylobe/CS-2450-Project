@@ -1,23 +1,37 @@
-﻿namespace UVSimGUI;
+﻿using System;
+using Microsoft.Maui.Accessibility;
+using Microsoft.Maui.Controls;
+
+namespace UVSimGUI;
 
 public partial class MainPage : ContentPage
 {
-    int count = 0;
-
     public MainPage()
     {
         InitializeComponent();
     }
-
-    private void OnCounterClicked(object sender, EventArgs e)
+    private void OnLoadClicked(object sender, EventArgs e)
     {
-        count++;
+        // Implement file loading logic
+    }
 
-        if (count == 1)
-            CounterBtn.Text = $"Clicked {count} time";
-        else
-            CounterBtn.Text = $"Clicked {count} times";
+    private void OnWriteClicked(object sender, EventArgs e)
+    {
+        // Implement file writing logic from instructions
+    }
 
-        SemanticScreenReader.Announce(CounterBtn.Text);
+    private void OnCompileClicked(object sender, EventArgs e)
+    {
+        // Call your compile method
+    }
+
+    private void OnRunClicked(object sender, EventArgs e)
+    {
+        // Call your run method
+    }
+
+    private void OnSaveInstructionsClicked(object sender, EventArgs e)
+    {
+        // Save instructions if needed
     }
 }
