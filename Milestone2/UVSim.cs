@@ -10,16 +10,61 @@ public class UVSim
         CPU = new CPU(MainMemory, Accumulator);
     }
 
-    public void LoadFile(string filePath)
+    public bool LoadFile(string filePath, out string errorMessage)
     {
-        string[] numbers = File.ReadAllLines(filePath)
+        string[] lines = File.ReadAllLines(filePath)
             .Where(line => !string.IsNullOrWhiteSpace(line))
             .ToArray();
+        errorMessage = "";
+        string[] numbers = new string[lines.Length];
+        for (int i = 0; i < lines.Length; i++)
+        {
+            if (!string.IsNullOrWhiteSpace(lines[i]))
+            {
+                string checkErrorMessage;
+                if (CheckString(lines[i], out checkErrorMessage))
+                {
+                    numbers[i] = lines[i];
+                }
+                else
+                {
+                    int errorLine = i + 1;
+                    errorMessage = "Error on line: " + errorLine + " " + checkErrorMessage + "\n";
+                    return false;
+                }
+            }
+        }
         LoadArray(numbers);
+        return true;
+    }
+
+    private bool CheckString(string line, out string errorMessage)
+    {
+        errorMessage = "";
+        try
+        {
+            int lineVal = int.Parse(line);
+            if (Math.Abs(lineVal) <= 9999)
+            {
+                return true;
+            }
+            else
+            {
+                errorMessage = line + " must contain 4 or less digits";
+                return false;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            errorMessage = line + " must contain only numerical values";
+            return false;
+        }
     }
 
     public void LoadArray(string[] numbers)
     {
+        int debugNum = numbers.Length;
         for (int i = 0; i < MainMemory.Length; i++)
         {
             if (i >= numbers.Length)
