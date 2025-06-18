@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milestone2xUnitTest", "Mile
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UVSimGUI", "UVSimGUI\UVSimGUI.csproj", "{F7C9CBBE-7034-4553-88DE-568AF310E30D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UVSimClassLib", "UVSimClassLib\UVSimClassLib.csproj", "{5E9C6EC3-B859-4DBB-8900-F283C770D69A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{F7C9CBBE-7034-4553-88DE-568AF310E30D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7C9CBBE-7034-4553-88DE-568AF310E30D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7C9CBBE-7034-4553-88DE-568AF310E30D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E9C6EC3-B859-4DBB-8900-F283C770D69A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E9C6EC3-B859-4DBB-8900-F283C770D69A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E9C6EC3-B859-4DBB-8900-F283C770D69A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E9C6EC3-B859-4DBB-8900-F283C770D69A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
