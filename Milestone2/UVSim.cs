@@ -15,27 +15,17 @@ public class UVSim
         string[] lines = File.ReadAllLines(filePath)
             .Where(line => !string.IsNullOrWhiteSpace(line))
             .ToArray();
-        errorMessage = "";
-        string[] numbers = new string[lines.Length];
-        for (int i = 0; i < lines.Length; i++)
+        errorMessage = string.Empty;
+        try
         {
-            if (!string.IsNullOrWhiteSpace(lines[i]))
-            {
-                string checkErrorMessage;
-                if (CheckString(lines[i], out checkErrorMessage))
-                {
-                    numbers[i] = lines[i];
-                }
-                else
-                {
-                    int errorLine = i + 1;
-                    errorMessage = "Error on line: " + errorLine + " " + checkErrorMessage + "\n";
-                    return false;
-                }
-            }
+            LoadArray(lines);
+            return true;
         }
-        LoadArray(numbers);
-        return true;
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+            return false;
+        }
     }
 
     private bool CheckString(string line, out string errorMessage)
@@ -62,8 +52,26 @@ public class UVSim
         }
     }
 
-    public void LoadArray(string[] numbers)
+    public void LoadArray(string[] lines)
     {
+        string[] numbers = new string[lines.Length];
+        for (int i = 0; i < lines.Length; i++)
+        {
+            if (!string.IsNullOrWhiteSpace(lines[i]))
+            {
+                string checkErrorMessage;
+                if (CheckString(lines[i], out checkErrorMessage))
+                {
+                    numbers[i] = lines[i];
+                }
+                else
+                {
+                    int errorLine = i + 1;
+                    string errorMessage = "Error on line: " + errorLine + " " + checkErrorMessage + "\n";
+                    throw new FormatException(errorMessage);
+                }
+            }
+        }
         int debugNum = numbers.Length;
         for (int i = 0; i < MainMemory.Length; i++)
         {

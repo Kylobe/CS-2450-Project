@@ -2,6 +2,7 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:storage="clr-namespace:Microsoft.Maui.Storage;assembly=Microsoft.Maui.Essentials"
              x:Class="UVSimGUI.MainPage">
 
     <ScrollView>
@@ -28,35 +29,55 @@
                                 <Label Text="Instructions" FontAttributes="Bold" FontSize="16" />
                                 <Editor x:Name="InstructionsEditor"
                                         Placeholder="Enter your instructions here..."
-                                        HeightRequest="400" AutoSize="TextChanges" />
-                                <Button x:Name="SaveInstructionsButton" Text="Save Instructions"
-                                        HorizontalOptions="End" Clicked="OnSaveInstructionsClicked" />
+                                        HeightRequest="400" AutoSize="TextChanges"
+                                        TextChanged="OnEditorChanged"/>
                             </VerticalStackLayout>
                         </ScrollView>
                     </Frame>
 
                     <!-- Second scrollable section -->
-                    <Frame CornerRadius="10" Padding="10" BackgroundColor="{StaticResource Tertiary}">
-                        <ScrollView>
-                            <VerticalStackLayout Spacing="10">
+                    <Frame CornerRadius="10" Padding="10" BackgroundColor="{StaticResource Tertiary}" BindingContext="{Binding MockConsole}">
+                        <ScrollView x:Name="ConsoleScrollView">
+                            <VerticalStackLayout Spacing="10" x:Name="MockConsole">
                                 <Label Text="Console" FontAttributes="Bold" FontSize="16" />
-                                <Editor x:Name="SelectedFileEditor" IsReadOnly="True"
-                                        HeightRequest="200" AutoSize="TextChanges" />
                             </VerticalStackLayout>
                         </ScrollView>
                     </Frame>
                 </VerticalStackLayout>
 
                 <!-- Right side section -->
-                <Frame Grid.Column="1" Grid.Row="0" CornerRadius="10" Padding="10" Margin="5">
-                    <ScrollView>
-                        <VerticalStackLayout Spacing="10">
-                            <Label Text="File Explorer" FontAttributes="Bold" FontSize="16" />
-                            <CollectionView x:Name="FileExplorerView">
-                                <!-- Your file explorer items will go here -->
-                            </CollectionView>
-                        </VerticalStackLayout>
-                    </ScrollView>
+                <Frame Grid.Column="1" Grid.Row="0" CornerRadius="10" Padding="0" Margin="5"
+                       BackgroundColor="Plum" BorderColor="#EEEEEE">
+                    <Grid>
+                        <CollectionView x:Name="FileExplorerView"
+                                        ItemsSource="{Binding Files}"
+                                        SelectionMode="None"
+                                        BackgroundColor="White">
+            
+                            <!-- Header -->
+                            <CollectionView.Header>
+                                <Grid BackgroundColor="#512BD4" Padding="15">
+                                    <Label Text="FILE EXPLORER" 
+                                           TextColor="White"
+                                           FontAttributes="Bold"
+                                           FontSize="16"
+                                           HorizontalOptions="Start"/>
+                                </Grid>
+                            </CollectionView.Header>
+            
+                            <!-- Item Template -->
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate  x:DataType="storage:FileResult">
+                                    <Label Text="{Binding FileName}"/>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+            
+                            <!-- Footer -->
+                            <CollectionView.Footer>
+                                <BoxView HeightRequest="1" Color="Transparent"/>
+                            </CollectionView.Footer>
+                        </CollectionView>
+                    </Grid>
                 </Frame>
             </Grid>
         </Grid>
