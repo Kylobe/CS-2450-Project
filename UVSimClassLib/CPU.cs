@@ -11,15 +11,9 @@ public class CPU
         Accumulator = accumulator;
     }
     // all commands
-    public void Read(int memoryAddress)
+    public async void Read(int memoryAddress, VerticalStackLayout mockConsole)
     {
-        int input;
-        //Ask for input
-        Console.Write($"Type value for memory location {memoryAddress:D2}: ");
-        while (!int.TryParse(Console.ReadLine(), out input))
-        {
-            Console.Write("Type an Integer: ");
-        }
+        int input = await GetUserInputAsync(mockConsole);
         //Store in memory 
         MainMemory[memoryAddress].RegVal = input;
 
@@ -96,5 +90,40 @@ public class CPU
     {
         currentRegister.Next = null;
         return currentRegister;
+    }
+
+    private async Task<int> GetUserInputAsync(VerticalStackLayout mockConsole)
+    {
+        var tcs = new TaskCompletionSource<int>();
+
+        Entry inputEntry = new Entry()
+        {
+            FontSize = 16,
+            Placeholder = "waiting for user input",
+        };
+        
+        mockConsole.Children.Add(inputEntry);
+        
+        inputEntry.Completed += (sender, e) =>
+        {
+            if (int.TryParse(inputEntry.Text, out int result))
+            {
+                tcs.TrySetResult(result);
+            }
+            else
+            {
+                var errorLabel = new Label
+                {
+                    Text = "Invalid input. Please enter an integer.",
+                    TextColor = Colors.Red,
+                    FontSize = 14
+                };
+                mockConsole.Children.Add(errorLabel);
+            }
+        };
+        
+        int input = await tcs.Task;
+
+        return input;
     }
 }
