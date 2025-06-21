@@ -1,4 +1,4 @@
-UVSim Milestone 2 
+UVSim Milestone 3
 =================
 
 Description:
@@ -11,9 +11,9 @@ The Program will parse each instruction, execute and output according to the val
 - MainMemory.cs      → Loads and stores memory
 - text1.txt          → Instructions file
 
-
---------------------------
-**How to run the Program**
+THIS IS A MAC OS PROGRAM ONLY
+-----------------------------
+ **How to run the Program**
 
 1. Requirements
 The following must be installed in order to run the program:
@@ -30,11 +30,11 @@ The following must be installed in order to run the program:
 
 5. Grant permissions to run executable file
 
-> chmod +x Milestone2
+> chmod +x UVSimGUI
 
-6. Run Milestone2 
+6. Run UVSimGUI 
 
-> ./Milestone2 <full path to file>
+> ./UVSimGUI <full path to file>
 
 You can also leave file path blank and in that case you will then be asked to input the path to your instructions file (ex: text1.txt)
 
