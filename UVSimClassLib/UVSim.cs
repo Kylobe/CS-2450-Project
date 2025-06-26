@@ -111,7 +111,7 @@ public class UVSim
                     CPU.Read(int.Parse(currentRegister.SecondHalf), mockConsole);
                     break;
                 case "11":
-                    CPU.Write(int.Parse(currentRegister.SecondHalf));
+                    CPU.Write(int.Parse(currentRegister.SecondHalf), mockConsole);
                     break;
                 case "20":
                     CPU.Load(int.Parse(currentRegister.SecondHalf));
