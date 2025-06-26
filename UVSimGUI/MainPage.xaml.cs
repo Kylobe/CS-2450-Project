@@ -93,7 +93,7 @@ public partial class MainPage : ContentPage
         Console.WriteLine("Compiling...");
         try
         {
-            string[] lines = InstructionsEditor.Text.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            string[] lines = InstructionsEditor.Text.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries);
             UVSim.LoadArray(lines);
             Compiled = true;
             AddToConsole("Compiled!", Colors.White);
