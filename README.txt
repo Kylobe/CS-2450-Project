@@ -4,12 +4,13 @@ UVSim Milestone 3
 Description:
 ------------
 This Project simulates Memory & Processor functions. It will take BasicML instructions in a .txt file.
-The Program will parse each instruction, execute and output according to the validity of the input.
+The Program GUI allows Reading and Writing of .txt instructions. Saving and Running in a local console.
 
-- Program.cs         → Launches the program
-- CPU.cs             → Handles instructions 
-- MainMemory.cs      → Loads and stores memory
-- text1.txt          → Instructions file
+📁 UVSimClassLib
+- CPU.cs (Handles Instruction Execution & I/O)
+- Register.cs (Parses and stores instruction values)
+- TraversableRegister.cs (Uses Next & Prev pointers for Traversal.) 
+- UVSim.cs (Constrols the instruction cycle (Fetch -> Decode -> Execute))
 
 THIS IS A MAC OS PROGRAM ONLY
 -----------------------------

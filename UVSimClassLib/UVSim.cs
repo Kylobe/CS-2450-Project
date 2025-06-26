@@ -118,43 +118,43 @@ namespace UVSimClassLib
             {
                 switch (currentRegister.FirstHalf)
                 {
-                    case "10":
-                        CPU.Read(int.Parse(currentRegister.SecondHalf), mockConsole);
-                        break;
-                    case "11":
-                        CPU.Write(int.Parse(currentRegister.SecondHalf));
-                        break;
-                    case "20":
-                        CPU.Load(int.Parse(currentRegister.SecondHalf));
-                        break;
-                    case "21":
-                        CPU.Store(int.Parse(currentRegister.SecondHalf));
-                        break;
-                    case "30":
-                        CPU.Add(int.Parse(currentRegister.SecondHalf));
-                        break;
-                    case "31":
-                        CPU.Subtract(int.Parse(currentRegister.SecondHalf));
-                        break;
-                    case "32":
-                        CPU.Divide(int.Parse(currentRegister.SecondHalf));
-                        break;
-                    case "33":
-                        CPU.Multiply(int.Parse(currentRegister.SecondHalf));
-                        break;
-                    case "40":
-                        currentRegister = CPU.Branch(currentRegister);
-                        break;
-                    case "41":
-                        currentRegister = CPU.BranchNeg(currentRegister);
-                        break;
-                    case "42":
-                        currentRegister = CPU.BranchZero(currentRegister);
-                        break;
-                    case "43":
-                        currentRegister = CPU.Halt(currentRegister);
-                        break;
-                }
+                case "10":
+                    CPU.Read(int.Parse(currentRegister.SecondHalf), mockConsole);
+                    break;
+                case "11":
+                    CPU.Write(int.Parse(currentRegister.SecondHalf), mockConsole);
+                    break;
+                case "20":
+                    CPU.Load(int.Parse(currentRegister.SecondHalf));
+                    break;
+                case "21":
+                    CPU.Store(int.Parse(currentRegister.SecondHalf));
+                    break;
+                case "30":
+                    CPU.Add(int.Parse(currentRegister.SecondHalf));
+                    break;
+                case "31":
+                    CPU.Subtract(int.Parse(currentRegister.SecondHalf));
+                    break;
+                case "32":
+                    CPU.Divide(int.Parse(currentRegister.SecondHalf));
+                    break;
+                case "33":
+                    CPU.Multiply(int.Parse(currentRegister.SecondHalf));
+                    break;
+                case "40":
+                    currentRegister = CPU.Branch(currentRegister);
+                    break;
+                case "41":
+                    currentRegister = CPU.BranchNeg(currentRegister);
+                    break;
+                case "42":
+                    currentRegister = CPU.BranchZero(currentRegister);
+                    break;
+                case "43":
+                    currentRegister = CPU.Halt(currentRegister);
+                    break;
+            }
 
                 if (currentRegister.Next is null)
                 {
