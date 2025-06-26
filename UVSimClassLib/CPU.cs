@@ -18,12 +18,17 @@ public class CPU
         MainMemory[memoryAddress].RegVal = input;
 
     }
-    public void Write(int memoryAddress)
+    public void Write(int memoryAddress, VerticalStackLayout mockConsole)
     {
         //Output Value of the given address
         int value = MainMemory[memoryAddress].RegVal;
-        Console.WriteLine($"Value of memory {memoryAddress:D2}: {value}");
-
+        Label newLabel = new Label 
+        { 
+            Text = $"Value of memory {memoryAddress:D2}: {value}",
+            TextColor = Colors.White,
+            FontSize = 14
+        };
+        mockConsole.Children.Add(newLabel);
     }
     public void Load(int memoryAddress) 
     {
