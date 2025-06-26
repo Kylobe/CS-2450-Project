@@ -21,6 +21,7 @@ namespace UVSimGUI;
 public partial class MainPage : ContentPage
 {
     public ObservableCollection<FileResult> Files = new ObservableCollection<FileResult>();
+    const string DefaultFileName = "CustomBasicML.txt";
     bool Compiled = false;
     UVSim UVSim = new UVSim();
     public MainPage()
@@ -64,14 +65,7 @@ public partial class MainPage : ContentPage
         }
         catch (Exception ex)
         {
-            Label newLabel = new Label 
-            { 
-                Text = ex.Message,
-                // You can add other properties if needed
-                TextColor = Colors.Red,
-                FontSize = 14
-            };
-            MockConsole.Children.Add(newLabel);
+            AddToConsole(ex.Message, Colors.Red);
         }
     }
 
@@ -81,7 +75,19 @@ public partial class MainPage : ContentPage
     }
     private void OnWriteClicked(object sender, EventArgs e)
     {
-        // Call a write method
+        string fileName = DefaultFileName;
+        string appDocumentsPath = FileSystem.AppDataDirectory;
+        string fullPath = Path.Combine(appDocumentsPath, fileName);
+
+        try
+        {
+            File.WriteAllText(fullPath, InstructionsEditor.Text);
+            AddToConsole($"Editor successfully written to {fullPath}", Colors.White);
+        }
+        catch (Exception ex)
+        {
+            AddToConsole(ex.Message, Colors.Red);
+        }
     }
     private async void OnCompileClicked(object sender, EventArgs e)
     {
@@ -91,26 +97,11 @@ public partial class MainPage : ContentPage
             string[] lines = InstructionsEditor.Text.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
             UVSim.LoadArray(lines);
             Compiled = true;
-            Console.WriteLine("Compiled!");
-            Label newLabel = new Label 
-            { 
-                Text = "Compile Success!",
-                // You can add other properties if needed
-                TextColor = Colors.White,
-                FontSize = 14
-            };
-            MockConsole.Children.Add(newLabel);
+            AddToConsole("Compiled!", Colors.White);
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
-            Label newLabel = new Label 
-            { 
-                Text = ex.Message,
-                TextColor = Colors.Red,
-                FontSize = 14
-            };
-            MockConsole.Children.Add(newLabel);
+            AddToConsole(ex.Message, Colors.Red);
         }
         
     }
@@ -124,25 +115,23 @@ public partial class MainPage : ContentPage
                 throw new Exception("Please compile before run");
             }
             UVSim.Run(MockConsole);
-            Label newLabel = new Label 
-            { 
-                Text = "Run Success!",
-                // You can add other properties if needed
-                TextColor = Colors.White,
-                FontSize = 14
-            };
-            MockConsole.Children.Add(newLabel);
+            AddToConsole("Run Success!", Colors.White);
         }
         catch(Exception ex)
         {
-            Label newLabel = new Label 
-            { 
-                Text = ex.Message,
-                // You can add other properties if needed
-                TextColor = Colors.Red,
-                FontSize = 14
-            };
-            MockConsole.Add(newLabel);
+            AddToConsole(ex.Message, Colors.Red);
         }
+    }
+
+    private void AddToConsole(string message, Color textColor)
+    {
+        Label newLabel = new Label 
+        { 
+            Text = message,
+            // You can add other properties if needed
+            TextColor = textColor,
+            FontSize = 14
+        };
+        MockConsole.Add(newLabel);
     }
 }
