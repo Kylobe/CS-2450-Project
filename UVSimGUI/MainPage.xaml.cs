@@ -113,7 +113,7 @@ public partial class MainPage : ContentPage
             {
                 throw new Exception("Please compile before run");
             }
-            UVSim.Run(MockConsole);
+            await UVSim.Run(MockConsole);
             AddToConsole("Run Success!", Colors.White);
         }
         catch(Exception ex)

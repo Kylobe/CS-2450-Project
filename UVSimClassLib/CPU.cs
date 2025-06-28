@@ -11,7 +11,7 @@ public class CPU
         Accumulator = accumulator;
     }
     // all commands
-    public async void Read(int memoryAddress, VerticalStackLayout mockConsole)
+    public async Task Read(int memoryAddress, VerticalStackLayout mockConsole)
     {
         int input = await GetUserInputAsync(mockConsole);
         //Store in memory 

@@ -111,15 +111,16 @@ namespace UVSimClassLib
             }
         }
 
-        public void Run(VerticalStackLayout mockConsole)
+        public async Task Run(VerticalStackLayout mockConsole)
         {
             TraversableRegister currentRegister = MainMemory[0];
+            Done = false;
             while (!Done)
             {
                 switch (currentRegister.FirstHalf)
                 {
                 case "10":
-                    CPU.Read(int.Parse(currentRegister.SecondHalf), mockConsole);
+                    await CPU.Read(int.Parse(currentRegister.SecondHalf), mockConsole);
                     break;
                 case "11":
                     CPU.Write(int.Parse(currentRegister.SecondHalf), mockConsole);
