@@ -20,7 +20,7 @@ namespace UVSimGUI;
 
 public partial class MainPage : ContentPage
 {
-    public ObservableCollection<FileResult> Files = new ObservableCollection<FileResult>();
+    public ObservableCollection<FileResult> Files { get; set; } = new ObservableCollection<FileResult>();
     const string DefaultFileName = "CustomBasicML.txt";
     bool Compiled = false;
     UVSim UVSim = new UVSim();
