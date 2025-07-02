@@ -10,6 +10,10 @@ using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Layouts;
 using Microsoft.Maui.Storage;
 using UVSimClassLib;
+#if MACCATALYST
+using AppKit;
+using Foundation;
+#endif
 
 namespace UVSimGUI;
 
