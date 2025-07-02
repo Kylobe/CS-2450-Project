@@ -19,7 +19,7 @@ namespace UVSimGUI;
 
 public partial class MainPage : ContentPage
 {
-    public ObservableCollection<FileResult> Files = new ObservableCollection<FileResult>();
+    public ObservableCollection<FileDisplay> Files { get; set; } = new();
     const string DefaultFileName = "CustomBasicML.txt";
     bool Compiled = false;
     UVSim UVSim = new UVSim();
@@ -34,12 +34,12 @@ public partial class MainPage : ContentPage
         var customFileType = new FilePickerFileType(
             new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.iOS, new[] { "public.plain-text" } },        // UTType for plain text
-                { DevicePlatform.Android, new[] { "text/plain" } },           // MIME type
-                { DevicePlatform.WinUI, new[] { ".txt" } },                   // File extension
-                { DevicePlatform.Tizen, new[] { "text/plain" } },             // MIME type
-                { DevicePlatform.macOS, new[] { "public.plain-text" } },      // UTType
-                { DevicePlatform.MacCatalyst, new[] { "public.plain-text" } } // Critical addition for MacCatalyst
+                { DevicePlatform.iOS, new[] { "public.plain-text" } },
+                { DevicePlatform.Android, new[] { "text/plain" } },
+                { DevicePlatform.WinUI, new[] { ".txt" } },
+                { DevicePlatform.Tizen, new[] { "text/plain" } },
+                { DevicePlatform.macOS, new[] { "public.plain-text" } },
+                { DevicePlatform.MacCatalyst, new[] { "public.plain-text" } }
             });
 
         PickOptions options = new()
@@ -50,16 +50,14 @@ public partial class MainPage : ContentPage
         try
         {
             FileResult result = await FilePicker.Default.PickAsync(options);
-            if (result != null)
+            if (result != null && result.FileName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
             {
-                if (result.FileName.EndsWith("txt", StringComparison.OrdinalIgnoreCase))
-                {
-                    using var stream = await result.OpenReadAsync();
-                    Files.Add(result);
-                    using var reader = new StreamReader(stream);
-                    InstructionsEditor.Text = await reader.ReadToEndAsync();
-                    Compiled = false;
-                }
+                using var stream = await result.OpenReadAsync();
+                using var reader = new StreamReader(stream);
+                InstructionsEditor.Text = await reader.ReadToEndAsync();
+                Files.Add(new FileDisplay(result));
+                AddToConsole($"Added file: {result.FileName}", Colors.Yellow);
+                Compiled = false;
             }
         }
         catch (Exception ex)
@@ -90,7 +88,6 @@ public partial class MainPage : ContentPage
     }
     private async void OnCompileClicked(object sender, EventArgs e)
     {
-        Console.WriteLine("Compiling...");
         try
         {
             string[] lines = InstructionsEditor.Text.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries);
@@ -102,7 +99,6 @@ public partial class MainPage : ContentPage
         {
             AddToConsole(ex.Message, Colors.Red);
         }
-        
     }
 
     private async void OnRunClicked(object sender, EventArgs e)
@@ -110,13 +106,12 @@ public partial class MainPage : ContentPage
         try
         {
             if (!Compiled)
-            {
                 throw new Exception("Please compile before run");
-            }
+
             await UVSim.Run(MockConsole);
             AddToConsole("Run Success!", Colors.White);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             AddToConsole(ex.Message, Colors.Red);
         }
@@ -124,13 +119,24 @@ public partial class MainPage : ContentPage
 
     private void AddToConsole(string message, Color textColor)
     {
-        Label newLabel = new Label 
-        { 
+        Label newLabel = new Label
+        {
             Text = message,
-            // You can add other properties if needed
             TextColor = textColor,
             FontSize = 14
         };
         MockConsole.Add(newLabel);
+    }
+}
+
+public class FileDisplay
+{
+    public string FileName { get; set; }
+    public string FullPath { get; set; }
+
+    public FileDisplay(FileResult file)
+    {
+        FileName = file.FileName;
+        FullPath = file.FullPath;
     }
 }

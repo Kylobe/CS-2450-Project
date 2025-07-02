@@ -67,11 +67,13 @@
             
                             <!-- Item Template -->
                             <CollectionView.ItemTemplate>
-                                <DataTemplate  x:DataType="storage:FileResult">
-                                    <Label Text="{Binding FileName}"/>
+                                <DataTemplate>
+                                    <StackLayout Padding="5">
+                                        <Label Text="{Binding FileName}" FontSize="14" TextColor="Black" />
+                                    </StackLayout>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
-            
+
                             <!-- Footer -->
                             <CollectionView.Footer>
                                 <BoxView HeightRequest="1" Color="Transparent"/>
