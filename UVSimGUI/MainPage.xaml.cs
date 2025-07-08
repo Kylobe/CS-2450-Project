@@ -8,7 +8,7 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Devices;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Layouts;
-using Microsoft.Maui.Storage;
+using CommunityToolkit.Maui.Storage;
 using UVSimClassLib;
 #if MACCATALYST
 using AppKit;
@@ -74,16 +74,33 @@ public partial class MainPage : ContentPage
     {
         Compiled = false;
     }
-    private void OnWriteClicked(object sender, EventArgs e)
+    private async void OnWriteClicked(object sender, EventArgs e)
     {
-        string fileName = DefaultFileName;
-        string appDocumentsPath = FileSystem.AppDataDirectory;
-        string fullPath = Path.Combine(appDocumentsPath, fileName);
-
         try
         {
-            File.WriteAllText(fullPath, InstructionsEditor.Text);
-            AddToConsole($"Editor successfully written to {fullPath}", Colors.Black);
+            var defaultName = Path.GetFileNameWithoutExtension(DefaultFileName);
+            var rawName = await DisplayPromptAsync(
+                "Save As",
+                "File name (without extension):",
+                initialValue: defaultName);
+
+            if (string.IsNullOrWhiteSpace(rawName))
+                return;                       // user cancelled
+
+            var fileName = $"{rawName}.txt";
+
+            using var stream = new MemoryStream(
+                Encoding.UTF8.GetBytes(InstructionsEditor.Text));
+
+            var result = await FileSaver.Default
+                                        .SaveAsync(fileName, stream,
+                                                   CancellationToken.None);
+
+            if (result.IsSuccessful)
+                AddToConsole($"Saved to: {result.FilePath}", Colors.Black);
+            else
+                AddToConsole($"Save failed: {result.Exception?.Message}",
+                             Colors.Red);
         }
         catch (Exception ex)
         {
