@@ -24,6 +24,9 @@ public partial class MainPage : ContentPage
     bool Compiled = false;
     UVSim UVSim = new UVSim();
     private ThemeColors Theme;
+    private FileDisplay? _activeFile;
+    private string? _folderPath;
+
     public MainPage()
     {
         InitializeComponent();
@@ -31,6 +34,66 @@ public partial class MainPage : ContentPage
         BindingContext = this;
         Resources["PrimaryColor"] = Theme.Primary;
         Resources["OffColor"] = Theme.Off;
+    }
+    private async void OnLoadFolderClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            var pickResult = await FolderPicker.Default.PickAsync(CancellationToken.None);
+            if (!pickResult.IsSuccessful)
+            {
+                AddToConsole($"Folder pick cancelled or failed: {pickResult.Exception?.Message}", Colors.Orange);
+                return;
+            }
+
+            _folderPath = pickResult.Folder.Path;
+
+            var txtFiles = Directory.GetFiles(_folderPath, "*.txt", SearchOption.TopDirectoryOnly);
+
+            if (txtFiles.Length == 0)
+            {
+                AddToConsole("No .txt files found in the selected folder.", Colors.Orange);
+                return;
+            }
+
+            Files.Clear();
+
+            foreach (var filePath in txtFiles)
+            {
+                Files.Add(new FileDisplay(new FileResult(filePath)));
+            }
+
+            AddToConsole($"Loaded {txtFiles.Length} file(s) from {_folderPath}.", Colors.Black);
+            Compiled = false;
+        }
+        catch (Exception ex)
+        {
+            AddToConsole(ex.Message, Colors.Red);
+        }
+    }
+    private async void OnFileSelected(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.Count == 0) return;
+        if (_activeFile != null) _activeFile.FileText = InstructionsEditor.Text;
+        _activeFile = e.CurrentSelection[0] as FileDisplay;
+        if (_activeFile is null) return;
+
+        try
+        {
+            if (_activeFile.FileText != null)
+            {
+                InstructionsEditor.Text = _activeFile.FileText;
+            }
+            else
+            {
+                InstructionsEditor.Text = await File.ReadAllTextAsync(_activeFile.FullPath);
+            }
+            Compiled = false;
+        }
+        catch (Exception ex)
+        {
+            AddToConsole(ex.Message, Colors.Red);
+        }
     }
 
     private async void OnLoadClicked(object sender, EventArgs e)
@@ -78,34 +141,24 @@ public partial class MainPage : ContentPage
     {
         try
         {
-            var defaultName = Path.GetFileNameWithoutExtension(DefaultFileName);
-            var rawName = await DisplayPromptAsync(
-                "Save As",
-                "File name (without extension):",
-                initialValue: defaultName);
-
-            if (string.IsNullOrWhiteSpace(rawName))
-                return;                       // user cancelled
-
-            var fileName = $"{rawName}.txt";
-
-            using var stream = new MemoryStream(
-                Encoding.UTF8.GetBytes(InstructionsEditor.Text));
-
-            var result = await FileSaver.Default
-                                        .SaveAsync(fileName, stream,
-                                                   CancellationToken.None);
-
-            if (result.IsSuccessful)
-                AddToConsole($"Saved to: {result.FilePath}", Colors.Black);
-            else
-                AddToConsole($"Save failed: {result.Exception?.Message}",
-                             Colors.Red);
+            _activeFile.FileText = InstructionsEditor.Text;
+            foreach (FileDisplay file in Files)
+            {
+                await SaveSilentlyAsync(_folderPath, file.FileName, file.FileText);
+            }
         }
         catch (Exception ex)
         {
             AddToConsole(ex.Message, Colors.Red);
         }
+    }
+    private async Task SaveSilentlyAsync(string folderPath, string fileName, string text)
+    {
+        Directory.CreateDirectory(folderPath);                     // make sure it exists
+        var fullPath = Path.Combine(folderPath, fileName);
+
+        await File.WriteAllTextAsync(fullPath, text);
+        AddToConsole($"Saved to: {fullPath}", Colors.Black);
     }
     private async void OnCompileClicked(object sender, EventArgs e)
     {
@@ -189,6 +242,7 @@ public class FileDisplay
 {
     public string FileName { get; set; }
     public string FullPath { get; set; }
+    public string? FileText { get; set; }
 
     public FileDisplay(FileResult file)
     {
