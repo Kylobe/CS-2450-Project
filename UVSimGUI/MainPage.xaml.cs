@@ -23,10 +23,14 @@ public partial class MainPage : ContentPage
     const string DefaultFileName = "CustomBasicML.txt";
     bool Compiled = false;
     UVSim UVSim = new UVSim();
+    private ThemeColors Theme;
     public MainPage()
     {
         InitializeComponent();
+        Theme = ThemeColors.Load();
         BindingContext = this;
+        Resources["PrimaryColor"] = Theme.Primary;
+        Resources["OffColor"] = Theme.Off;
     }
 
     private async void OnLoadClicked(object sender, EventArgs e)
@@ -56,7 +60,7 @@ public partial class MainPage : ContentPage
                 using var reader = new StreamReader(stream);
                 InstructionsEditor.Text = await reader.ReadToEndAsync();
                 Files.Add(new FileDisplay(result));
-                AddToConsole($"Added file: {result.FileName}", Colors.Yellow);
+                AddToConsole($"Added file: {result.FileName}", Colors.Black);
                 Compiled = false;
             }
         }
@@ -79,7 +83,7 @@ public partial class MainPage : ContentPage
         try
         {
             File.WriteAllText(fullPath, InstructionsEditor.Text);
-            AddToConsole($"Editor successfully written to {fullPath}", Colors.White);
+            AddToConsole($"Editor successfully written to {fullPath}", Colors.Black);
         }
         catch (Exception ex)
         {
@@ -93,7 +97,7 @@ public partial class MainPage : ContentPage
             string[] lines = InstructionsEditor.Text.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries);
             UVSim.LoadArray(lines);
             Compiled = true;
-            AddToConsole("Compiled!", Colors.White);
+            AddToConsole("Compiled!", Colors.Black);
         }
         catch (Exception ex)
         {
@@ -109,11 +113,46 @@ public partial class MainPage : ContentPage
                 throw new Exception("Please compile before run");
 
             await UVSim.Run(MockConsole);
-            AddToConsole("Run Success!", Colors.White);
+            AddToConsole("Run Success!", Colors.Black);
         }
         catch (Exception ex)
         {
             AddToConsole(ex.Message, Colors.Red);
+        }
+    }
+
+    private void UpdateTheme(string primaryHex, string offHex)
+    {
+        Theme.PrimaryHex = primaryHex;
+        Theme.OffHex = offHex;
+        Theme.Save();
+
+        Resources["PrimaryColor"] = Theme.Primary;
+        Resources["OffColor"] = Theme.Off;
+
+        AddToConsole($"Theme updated to {primaryHex} / {offHex}", Colors.LightGreen);
+    }
+
+    private void OnApplyThemeClicked(object sender, EventArgs e)
+    {
+        string primaryHex = PrimaryColorEntry.Text?.Trim();
+        string offHex = OffColorEntry.Text?.Trim();
+        UpdateTheme(primaryHex, offHex);
+
+        if (!string.IsNullOrWhiteSpace(primaryHex) && !string.IsNullOrWhiteSpace(offHex))
+        {
+            try
+            {
+                UpdateTheme(primaryHex, offHex);
+            }
+            catch (Exception ex)
+            {
+                AddToConsole($"Invalid color format: {ex.Message}", Colors.Red);
+            }
+        }
+        else
+        {
+            AddToConsole("Please enter both primary and off colors.", Colors.Orange);
         }
     }
 
@@ -122,7 +161,7 @@ public partial class MainPage : ContentPage
         Label newLabel = new Label
         {
             Text = message,
-            TextColor = textColor,
+            TextColor = Colors.Black,
             FontSize = 14
         };
         MockConsole.Add(newLabel);

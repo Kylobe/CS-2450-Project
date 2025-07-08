@@ -5,6 +5,8 @@
              x:Class="UVSimGUI.App">
     <Application.Resources>
         <ResourceDictionary>
+            <Color x:Key="PrimaryColor">#4C721D</Color>
+            <Color x:Key="OffColor">#FFFFFF</Color>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />

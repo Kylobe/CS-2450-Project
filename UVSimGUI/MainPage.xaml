@@ -6,37 +6,65 @@
              x:Class="UVSimGUI.MainPage">
 
     <ScrollView>
-        <Grid RowDefinitions="Auto, *" ColumnDefinitions="*">
+        <Grid RowDefinitions="Auto, Auto, *" ColumnDefinitions="*">
+            <!-- THEME CONFIG SECTION -->
+            <VerticalStackLayout Grid.Row="0" Spacing="5" Padding="10" BackgroundColor="{DynamicResource OffColor}">
+                <Label Text="Customize Theme" FontSize="16" FontAttributes="Bold" />
+                <HorizontalStackLayout Spacing="10">
+                    <Entry x:Name="PrimaryColorEntry" 
+                           Placeholder="#4C721D" 
+                           WidthRequest="120"
+                           TextColor="Black" />
+                    <Entry x:Name="OffColorEntry" 
+                           Placeholder="#FFFFFF" 
+                           WidthRequest="120"
+                           TextColor="Black" />
+                    <Button Text="Apply Theme"
+                            Clicked="OnApplyThemeClicked"
+                            BackgroundColor="{DynamicResource OffColor}"
+                            TextColor="{DynamicResource PrimaryColor}" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+            
             <!-- Header with buttons -->
-            <HorizontalStackLayout Grid.Row="0" Grid.Column="0"
+            <HorizontalStackLayout Grid.Row="1" Grid.Column="0"
                                    HorizontalOptions="Center"
                                    Spacing="20"
-                                   Padding="10">
-                <Button x:Name="LoadButton" Text="Load" Clicked="OnLoadClicked" WidthRequest="80" />
-                <Button x:Name="WriteButton" Text="Write" Clicked="OnWriteClicked" WidthRequest="80" />
-                <Button x:Name="CompileButton" Text="Compile" Clicked="OnCompileClicked" WidthRequest="80" />
-                <Button x:Name="RunButton" Text="Run" Clicked="OnRunClicked" WidthRequest="80" />
+                                   Padding="10"
+                                   BackgroundColor="{DynamicResource PrimaryColor}">
+                <Button x:Name="LoadButton" Text="Load" Clicked="OnLoadClicked" WidthRequest="80"
+        BackgroundColor="{DynamicResource OffColor}" TextColor="{DynamicResource PrimaryColor}" />
+
+                <Button x:Name="WriteButton" Text="Write" Clicked="OnWriteClicked" WidthRequest="80"
+        BackgroundColor="{DynamicResource OffColor}" TextColor="{DynamicResource PrimaryColor}" />
+
+                <Button x:Name="CompileButton" Text="Compile" Clicked="OnCompileClicked" WidthRequest="80"
+        BackgroundColor="{DynamicResource OffColor}" TextColor="{DynamicResource PrimaryColor}" />
+
+                <Button x:Name="RunButton" Text="Run" Clicked="OnRunClicked" WidthRequest="80"
+        BackgroundColor="{DynamicResource OffColor}" TextColor="{DynamicResource PrimaryColor}" />
             </HorizontalStackLayout>
 
             <!-- Main content area -->
-            <Grid Grid.Row="1" Grid.Column="0" ColumnDefinitions="*, *" RowDefinitions="*">
+            <Grid Grid.Row="2" Grid.Column="0" ColumnDefinitions="*, *" RowDefinitions="*">
                 <!-- Left side (two stacked scrollable sections) -->
                 <VerticalStackLayout Grid.Column="0" Grid.Row="0" Spacing="10" Margin="5">
                     <!-- First scrollable section -->
-                    <Frame CornerRadius="10" Padding="10" BackgroundColor="{StaticResource Secondary}">
+                    <Frame CornerRadius="10" Padding="10" BackgroundColor="{DynamicResource PrimaryColor}">
                         <ScrollView>
                             <VerticalStackLayout Spacing="10">
                                 <Label Text="Instructions" FontAttributes="Bold" FontSize="16" />
                                 <Editor x:Name="InstructionsEditor"
                                         Placeholder="Enter your instructions here..."
                                         HeightRequest="400" AutoSize="TextChanges"
-                                        TextChanged="OnEditorChanged"/>
+                                        TextChanged="OnEditorChanged"
+                                        TextColor="Black" />
                             </VerticalStackLayout>
                         </ScrollView>
                     </Frame>
 
                     <!-- Second scrollable section -->
-                    <Frame CornerRadius="10" Padding="10" BackgroundColor="{StaticResource Tertiary}" BindingContext="{Binding MockConsole}">
+                    <Frame CornerRadius="10" Padding="10" BackgroundColor="{DynamicResource PrimaryColor}" BindingContext="{Binding MockConsole}">
                         <ScrollView x:Name="ConsoleScrollView">
                             <VerticalStackLayout Spacing="10" x:Name="MockConsole">
                                 <Label Text="Console" FontAttributes="Bold" FontSize="16" />
@@ -47,18 +75,19 @@
 
                 <!-- Right side section -->
                 <Frame Grid.Column="1" Grid.Row="0" CornerRadius="10" Padding="0" Margin="5"
-                       BackgroundColor="Plum" BorderColor="#EEEEEE">
+                       BackgroundColor="{DynamicResource PrimaryColor}" 
+                       BorderColor="{DynamicResource OffColor}">
                     <Grid>
                         <CollectionView x:Name="FileExplorerView"
                                         ItemsSource="{Binding Files}"
                                         SelectionMode="None"
-                                        BackgroundColor="White">
+                                        BackgroundColor="{DynamicResource OffColor}">
             
                             <!-- Header -->
                             <CollectionView.Header>
-                                <Grid BackgroundColor="#512BD4" Padding="15">
+                                <Grid BackgroundColor="{DynamicResource PrimaryColor}" Padding="15">
                                     <Label Text="FILE EXPLORER" 
-                                           TextColor="White"
+                                           TextColor="{DynamicResource OffColor}"
                                            FontAttributes="Bold"
                                            FontSize="16"
                                            HorizontalOptions="Start"/>

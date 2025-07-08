@@ -25,7 +25,7 @@ public class CPU
         Label newLabel = new Label 
         { 
             Text = $"Value of memory {memoryAddress:D2}: {value}",
-            TextColor = Colors.White,
+            TextColor = Colors.Black,
             FontSize = 14
         };
         mockConsole.Children.Add(newLabel);
