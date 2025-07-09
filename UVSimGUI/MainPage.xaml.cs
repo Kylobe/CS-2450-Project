@@ -23,16 +23,35 @@ public partial class MainPage : ContentPage
     const string DefaultFileName = "CustomBasicML.txt";
     bool Compiled = false;
     UVSim UVSim = new UVSim();
+    private const int MaxLines = 100;
+    private bool _isUpdating = false;
+    private bool _isScrolling = false;
+    private double _lastScrollPosition = 0;
     private ThemeColors Theme;
     public MainPage()
     {
         InitializeComponent();
         Theme = ThemeColors.Load();
         BindingContext = this;
+        PopulateLineNum();
+        EditorScrollView.Scrolled += (sender, e) =>
+        {
+            if (!_isScrolling && Math.Abs(e.ScrollY - _lastScrollPosition) > 0.1)
+            {
+                _isScrolling = true;
+                LineNumberScrollView.ScrollToAsync(0, e.ScrollY, false);
+                _lastScrollPosition = e.ScrollY;
+                _isScrolling = false;
+            }
+        };
         Resources["PrimaryColor"] = Theme.Primary;
         Resources["OffColor"] = Theme.Off;
     }
 
+    private void PopulateLineNum()
+    {
+        LineNumberLabel.Text = string.Join(Environment.NewLine, Enumerable.Range(1, MaxLines));
+    }
     private async void OnLoadClicked(object sender, EventArgs e)
     {
         var customFileType = new FilePickerFileType(
@@ -72,7 +91,25 @@ public partial class MainPage : ContentPage
 
     private void OnEditorChanged(object sender, TextChangedEventArgs e)
     {
-        Compiled = false;
+        if (_isUpdating) return;
+    
+        _isUpdating = true;
+        try
+        {
+            Compiled = false;
+            string[] lines = InstructionsEditor.Text?.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None) ?? Array.Empty<string>();
+
+            if (lines.Length > MaxLines)
+            {
+                string newText = string.Join(Environment.NewLine, lines.Take(MaxLines));
+                InstructionsEditor.Text = newText;
+                InstructionsEditor.CursorPosition = newText.Length;
+            }
+        }
+        finally
+        {
+            _isUpdating = false;
+        }
     }
     private void OnWriteClicked(object sender, EventArgs e)
     {
