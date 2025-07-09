@@ -35,6 +35,34 @@ public partial class MainPage : ContentPage
         Resources["PrimaryColor"] = Theme.Primary;
         Resources["OffColor"] = Theme.Off;
     }
+    private async void OnRenameClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            string? newName = await DisplayPromptAsync("Rename File", "Enter new file name (with .txt):");
+            if (string.IsNullOrEmpty(newName)) return;
+            string oldPath = Path.Combine(_folderPath, _activeFile.FileName);
+            string newPath = Path.Combine(_folderPath, newName);
+
+            if (File.Exists(oldPath))
+            {
+                File.Move(oldPath, newPath);
+                _activeFile.FileName = newName;
+                _activeFile.FullPath = newPath;
+                FileExplorerView.ItemsSource = null;
+                FileExplorerView.ItemsSource = Files;
+                AddToConsole($"Renamed to: {newPath}", Colors.Black);
+            }
+            else
+            {
+                AddToConsole("Original file not found.", Colors.Orange);
+            }
+        }
+        catch (Exception ex)
+        {
+            AddToConsole(ex.Message, Colors.Red);
+        }
+    }
     private async void OnLoadFolderClicked(object sender, EventArgs e)
     {
         try
