@@ -79,7 +79,7 @@ public partial class MainPage : ContentPage
                 using var reader = new StreamReader(stream);
                 InstructionsEditor.Text = await reader.ReadToEndAsync();
                 Files.Add(new FileDisplay(result));
-                AddToConsole($"Added file: {result.FileName}", Colors.Black);
+                AddToConsole($"Added file: {result.FileName}", Colors.Yellow);
                 Compiled = false;
             }
         }
@@ -215,7 +215,7 @@ public partial class MainPage : ContentPage
         Label newLabel = new Label
         {
             Text = message,
-            TextColor = Colors.Black,
+            TextColor = textColor,
             FontSize = 14
         };
         MockConsole.Add(newLabel);
