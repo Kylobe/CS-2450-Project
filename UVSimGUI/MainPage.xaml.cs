@@ -170,11 +170,28 @@ public partial class MainPage : ContentPage
         AddToConsole($"Theme updated to {primaryHex} / {offHex}", Colors.LightGreen);
     }
 
+    private void OnThemeToggled(object sender, ToggledEventArgs e)
+    {
+        string primaryHex = InverseColor(Theme.PrimaryHex);
+        string offHex = InverseColor(Theme.OffHex);
+        
+        UpdateTheme(primaryHex, offHex);
+    }
+
+    private string InverseColor(string hex)
+    {
+        hex = hex.Substring(1);
+
+        var r = 255 - Convert.ToInt32(hex.Substring(0, 2), 16);
+        var g = 255 - Convert.ToInt32(hex.Substring(2, 2), 16);
+        var b = 255 - Convert.ToInt32(hex.Substring(4, 2), 16);
+
+        return $"#{r:X2}{g:X2}{b:X2}";
+    }
     private void OnApplyThemeClicked(object sender, EventArgs e)
     {
         string primaryHex = PrimaryColorEntry.Text?.Trim();
         string offHex = OffColorEntry.Text?.Trim();
-        UpdateTheme(primaryHex, offHex);
 
         if (!string.IsNullOrWhiteSpace(primaryHex) && !string.IsNullOrWhiteSpace(offHex))
         {
@@ -202,6 +219,7 @@ public partial class MainPage : ContentPage
             FontSize = 14
         };
         MockConsole.Add(newLabel);
+        ConsoleScrollView.ScrollToAsync(MockConsole, ScrollToPosition.End, false);
     }
 }
 

@@ -6,7 +6,7 @@
              x:Class="UVSimGUI.MainPage">
 
     <ScrollView>
-        <Grid RowDefinitions="Auto, Auto, *" ColumnDefinitions="*">
+        <Grid RowDefinitions="Auto, Auto, *">
             <!-- THEME CONFIG SECTION -->
             <VerticalStackLayout Grid.Row="0" Spacing="5" Padding="10" BackgroundColor="{DynamicResource OffColor}">
                 <Label Text="Customize Theme" FontSize="16" FontAttributes="Bold" />
@@ -27,13 +27,17 @@
             </VerticalStackLayout>
             
             <!-- Header with buttons -->
-            <HorizontalStackLayout Grid.Row="1" Grid.Column="0"
+            <HorizontalStackLayout Grid.Row="1"
                                    HorizontalOptions="Center"
                                    Spacing="20"
                                    Padding="10"
                                    BackgroundColor="{DynamicResource PrimaryColor}">
+                <Switch 
+                    x:Name="ToggleSwitch"
+                    Toggled="OnThemeToggled"
+                    BackgroundColor="{DynamicResource PrimaryColor}" ThumbColor="{DynamicResource OffColor}"/>
                 <Button x:Name="LoadButton" Text="Load" Clicked="OnLoadClicked" WidthRequest="80"
-        BackgroundColor="{DynamicResource OffColor}" TextColor="{DynamicResource PrimaryColor}" />
+                        BackgroundColor="{DynamicResource OffColor}" TextColor="{DynamicResource PrimaryColor}" />
 
                 <Button x:Name="WriteButton" Text="Write" Clicked="OnWriteClicked" WidthRequest="80"
         BackgroundColor="{DynamicResource OffColor}" TextColor="{DynamicResource PrimaryColor}" />
@@ -93,7 +97,7 @@
                     </Frame>
 
                     <!-- Second scrollable section -->
-                    <Frame CornerRadius="10" Padding="10" BackgroundColor="{DynamicResource PrimaryColor}" BindingContext="{Binding MockConsole}">
+                    <Frame CornerRadius="10" Padding="10" BackgroundColor="{DynamicResource PrimaryColor}" BindingContext="{Binding MockConsole}" HeightRequest="200">
                         <ScrollView x:Name="ConsoleScrollView">
                             <VerticalStackLayout Spacing="10" x:Name="MockConsole">
                                 <Label Text="Console" FontAttributes="Bold" FontSize="16" />
@@ -105,7 +109,8 @@
                 <!-- Right side section -->
                 <Frame Grid.Column="1" Grid.Row="0" CornerRadius="10" Padding="0" Margin="5"
                        BackgroundColor="{DynamicResource PrimaryColor}" 
-                       BorderColor="{DynamicResource OffColor}">
+                       BorderColor="{DynamicResource OffColor}"
+                       HeightRequest="800">
                     <Grid>
                         <CollectionView x:Name="FileExplorerView"
                                         ItemsSource="{Binding Files}"
