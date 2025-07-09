@@ -36,9 +36,15 @@
                     x:Name="ToggleSwitch"
                     Toggled="OnThemeToggled"
                     BackgroundColor="{DynamicResource PrimaryColor}" ThumbColor="{DynamicResource OffColor}"/>
-                <Button x:Name="LoadButton" Text="Load" Clicked="OnLoadClicked" WidthRequest="80"
-                        BackgroundColor="{DynamicResource OffColor}" TextColor="{DynamicResource PrimaryColor}" />
+                <Button x:Name="LoadButton" Text="File" Clicked="OnLoadClicked" WidthRequest="80"
+        BackgroundColor="{DynamicResource OffColor}" TextColor="{DynamicResource PrimaryColor}" />
+                
+                <Button x:Name="LoadFolderButton" Text="Folder" Clicked="OnLoadFolderClicked" WidthRequest="80" 
+        BackgroundColor="{DynamicResource OffColor}" TextColor="{DynamicResource PrimaryColor}" />
 
+                <Button x:Name="RenameButton" Text="Rename" Clicked="OnRenameClicked" WidthRequest="80"
+        BackgroundColor="{DynamicResource OffColor}" TextColor="{DynamicResource PrimaryColor}" />
+                
                 <Button x:Name="WriteButton" Text="Write" Clicked="OnWriteClicked" WidthRequest="80"
         BackgroundColor="{DynamicResource OffColor}" TextColor="{DynamicResource PrimaryColor}" />
 
@@ -47,7 +53,9 @@
 
                 <Button x:Name="RunButton" Text="Run" Clicked="OnRunClicked" WidthRequest="80"
         BackgroundColor="{DynamicResource OffColor}" TextColor="{DynamicResource PrimaryColor}" />
+
             </HorizontalStackLayout>
+        
 
             <!-- Main content area -->
             <Grid Grid.Row="2" Grid.Column="0" ColumnDefinitions="*, *" RowDefinitions="*">
@@ -114,7 +122,8 @@
                     <Grid>
                         <CollectionView x:Name="FileExplorerView"
                                         ItemsSource="{Binding Files}"
-                                        SelectionMode="None"
+                                        SelectionMode="Single"
+                                        SelectionChanged="OnFileSelected"
                                         BackgroundColor="{DynamicResource OffColor}">
             
                             <!-- Header -->
@@ -131,9 +140,29 @@
                             <!-- Item Template -->
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
-                                    <StackLayout Padding="5">
-                                        <Label Text="{Binding FileName}" FontSize="14" TextColor="Black" />
-                                    </StackLayout>
+                                    <Grid Padding="5">
+                                        <Label x:Name="NameLabel"
+                                            Text="{Binding FileName}"
+                                            FontSize="14"
+                                            TextColor="Black" />
+
+                                        <!-- highlight when selected -->
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup Name="CommonStates">
+                                                <VisualState Name="Normal" />
+                                                <VisualState Name="Selected">
+                                                    <VisualState.Setters>
+                                                        <!-- background and foreground swap -->
+                                                        <Setter Property="BackgroundColor"
+                                                            Value="{DynamicResource PrimaryColor}" />
+                                                        <Setter TargetName="NameLabel"
+                                                            Property="Label.TextColor"
+                                                            Value="{DynamicResource OffColor}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Grid>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
 
