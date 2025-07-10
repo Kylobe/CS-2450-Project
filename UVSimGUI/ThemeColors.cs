@@ -35,7 +35,11 @@ public class ThemeColors
         }
         catch
         {
-            // fall back to default
+            return new ThemeColors
+            {
+                PrimaryHex = "#4C721D",
+                OffHex = "#FFFFFF"
+            };
         }
 
         return new ThemeColors();

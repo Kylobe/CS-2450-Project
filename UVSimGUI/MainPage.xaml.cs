@@ -23,6 +23,10 @@ public partial class MainPage : ContentPage
     const string DefaultFileName = "CustomBasicML.txt";
     bool Compiled = false;
     UVSim UVSim = new UVSim();
+    private const int MaxLines = 100;
+    private bool _isUpdating = false;
+    private bool _isScrolling = false;
+    private double _lastScrollPosition = 0;
     private ThemeColors Theme;
     private FileDisplay? _activeFile;
     private string? _folderPath;
@@ -32,6 +36,17 @@ public partial class MainPage : ContentPage
         InitializeComponent();
         Theme = ThemeColors.Load();
         BindingContext = this;
+        PopulateLineNum();
+        EditorScrollView.Scrolled += (sender, e) =>
+        {
+            if (!_isScrolling && Math.Abs(e.ScrollY - _lastScrollPosition) > 0.1)
+            {
+                _isScrolling = true;
+                LineNumberScrollView.ScrollToAsync(0, e.ScrollY, false);
+                _lastScrollPosition = e.ScrollY;
+                _isScrolling = false;
+            }
+        };
         Resources["PrimaryColor"] = Theme.Primary;
         Resources["OffColor"] = Theme.Off;
     }
@@ -124,6 +139,10 @@ public partial class MainPage : ContentPage
         }
     }
 
+    private void PopulateLineNum()
+    {
+        LineNumberLabel.Text = string.Join(Environment.NewLine, Enumerable.Range(1, MaxLines));
+    }
     private async void OnLoadClicked(object sender, EventArgs e)
     {
         var customFileType = new FilePickerFileType(
@@ -151,7 +170,7 @@ public partial class MainPage : ContentPage
                 using var reader = new StreamReader(stream);
                 InstructionsEditor.Text = await reader.ReadToEndAsync();
                 Files.Add(new FileDisplay(result));
-                AddToConsole($"Added file: {result.FileName}", Colors.Black);
+                AddToConsole($"Added file: {result.FileName}", Colors.Yellow);
                 Compiled = false;
             }
         }
@@ -163,7 +182,25 @@ public partial class MainPage : ContentPage
 
     private void OnEditorChanged(object sender, TextChangedEventArgs e)
     {
-        Compiled = false;
+        if (_isUpdating) return;
+    
+        _isUpdating = true;
+        try
+        {
+            Compiled = false;
+            string[] lines = InstructionsEditor.Text?.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None) ?? Array.Empty<string>();
+
+            if (lines.Length > MaxLines)
+            {
+                string newText = string.Join(Environment.NewLine, lines.Take(MaxLines));
+                InstructionsEditor.Text = newText;
+                InstructionsEditor.CursorPosition = newText.Length;
+            }
+        }
+        finally
+        {
+            _isUpdating = false;
+        }
     }
     private async void OnWriteClicked(object sender, EventArgs e)
     {
@@ -231,11 +268,28 @@ public partial class MainPage : ContentPage
         AddToConsole($"Theme updated to {primaryHex} / {offHex}", Colors.LightGreen);
     }
 
+    private void OnThemeToggled(object sender, ToggledEventArgs e)
+    {
+        string primaryHex = InverseColor(Theme.PrimaryHex);
+        string offHex = InverseColor(Theme.OffHex);
+        
+        UpdateTheme(primaryHex, offHex);
+    }
+
+    private string InverseColor(string hex)
+    {
+        hex = hex.Substring(1);
+
+        var r = 255 - Convert.ToInt32(hex.Substring(0, 2), 16);
+        var g = 255 - Convert.ToInt32(hex.Substring(2, 2), 16);
+        var b = 255 - Convert.ToInt32(hex.Substring(4, 2), 16);
+
+        return $"#{r:X2}{g:X2}{b:X2}";
+    }
     private void OnApplyThemeClicked(object sender, EventArgs e)
     {
         string primaryHex = PrimaryColorEntry.Text?.Trim();
         string offHex = OffColorEntry.Text?.Trim();
-        UpdateTheme(primaryHex, offHex);
 
         if (!string.IsNullOrWhiteSpace(primaryHex) && !string.IsNullOrWhiteSpace(offHex))
         {
@@ -259,10 +313,11 @@ public partial class MainPage : ContentPage
         Label newLabel = new Label
         {
             Text = message,
-            TextColor = Colors.Black,
+            TextColor = textColor,
             FontSize = 14
         };
         MockConsole.Add(newLabel);
+        ConsoleScrollView.ScrollToAsync(MockConsole, ScrollToPosition.End, false);
     }
 }
 
