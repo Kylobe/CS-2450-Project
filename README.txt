@@ -1,49 +1,123 @@
-UVSim Milestone 3
+UVSim Milestone 4
 =================
 
-Description:
-------------
-This Project simulates Memory & Processor functions. It will take BasicML instructions in a .txt file.
-The Program GUI allows Reading and Writing of .txt instructions. Saving and Running in a local console.
+Overview:
+---------
+UVSim is a virtual machine simulator built for educational use. It executes programs written in BasicML (Basic Machine Language) and visually simulates memory, instructions, and CPU execution via a clean, modern GUI built using .NET MAUI.
 
-📁 UVSimClassLib
-- CPU.cs (Handles Instruction Execution & I/O)
-- Register.cs (Parses and stores instruction values)
-- TraversableRegister.cs (Uses Next & Prev pointers for Traversal.) 
-- UVSim.cs (Constrols the instruction cycle (Fetch -> Decode -> Execute))
+This version includes:
+- Graphical editor for BasicML programs
+- Real-time console for simulated I/O
+- Visual file explorer for .txt programs
+- File loading, editing, renaming, and saving
+- Customizable theme support with persistent config
+- Cross-platform support (Windows, macOS, Android, iOS)
 
-THIS IS A MAC OS PROGRAM ONLY
------------------------------
- **How to run the Program**
+------------------------------------------------------
 
-1. Requirements
-The following must be installed in order to run the program:
+How to Run the Program:
+-----------------------
+Requirements:
+- .NET 8.0 SDK (https://dotnet.microsoft.com/download)
+- Visual Studio 2022 or newer with the .NET MAUI workload installed
 
-- .NET SDK 6.0 or later
+Supported Platforms:
+- Windows 10+
+- macOS (Intel & Apple Silicon via MacCatalyst)
+- Android (emulator or physical device)
+- iOS (Xcode + simulator or device)
 
-2. Download the proper .zip file for your OS
+Steps to Run:
+1. Clone the repository:
+   git clone https://github.com/Kylobe/CS-2450-Project.git
 
-3. Open terminal and go to downloads directory
+2. Open the solution (UVSim.sln) in Visual Studio.
 
-4. Unzip file and enter file
+3. Choose the target platform (Windows, MacCatalyst, or Android).
 
-> unzip <file-name>.zip && cd <file-name>
+4. Build and run the project.
 
-5. Grant permissions to run executable file
+------------------------------------------------------
 
-> chmod +x UVSimGUI
+GUI Workflow and Controls:
+--------------------------
 
-6. Run UVSimGUI 
+Instructions Editor:
+- Enter or paste up to 100 BasicML instructions.
+- Editor automatically shows line numbers for clarity.
+- Instructions are validated and compiled into memory.
 
-> ./UVSimGUI <full path to file>
+File Explorer:
+- Located on the right side of the GUI.
+- Lists all `.txt` files in a selected folder.
+- Click a file to load its contents into the editor.
+- Files can also be renamed (feature available if wired).
 
-You can also leave file path blank and in that case you will then be asked to input the path to your instructions file (ex: text1.txt)
+Buttons and Their Functions:
+----------------------------
+Load:      Opens a file picker to load a `.txt` file into the editor.
+Write:     Saves all currently loaded and edited files back to disk.
+Compile:   Parses and validates instructions, loading them into memory.
+Run:       Executes instructions line by line. Output appears in the console.
+Apply Theme: Sets new theme colors based on two HEX input fields.
 
-The Program will then execute the instructions line by line as written.
+------------------------------------------------------
 
-===================
+User Input:
+-----------
+When a READ instruction is executed:
+- A text field appears in the console.
+- Type an integer and press ENTER to submit.
+- Invalid input will show an error message below the input field.
+
+------------------------------------------------------
+
+Theme Customization:
+--------------------
+You can customize the appearance of the simulator by setting two colors:
+
+Primary Color: Affects header bars, console background, and major highlights.
+Off Color:     Affects button backgrounds and supporting areas.
+
+To apply a theme:
+1. Enter valid HEX codes into the theme fields (e.g., #4C721D, #FFFFFF).
+2. Click the "Apply Theme" button.
+3. Optionally use the toggle to invert the theme.
+
+Themes are saved to disk and persist between sessions.
+
+------------------------------------------------------
+
+Project Structure:
+------------------
+
+UVSimClassLib/
+- CPU.cs: Handles execution of each instruction.
+- Register.cs: Stores and formats values using a four-digit word model.
+- TraversableRegister.cs: Enables linked navigation of memory.
+- UVSim.cs: Runs the fetch-decode-execute loop and manages memory setup.
+
+UVSimGUI/
+- MainPage.xaml: Defines the visual layout of the GUI.
+- MainPage.xaml.cs: Handles user interaction, file operations, execution control.
+- ThemeColors.cs: Loads and saves persistent theme settings.
+- App.xaml, AppShell.xaml: Set up the MAUI application shell and routes.
+
+------------------------------------------------------
+
+Example Instruction File (example.txt):
+---------------------------------------
+1007   ; READ a value into memory address 07
+2007   ; LOAD value from address 07 into accumulator
+3008   ; ADD value at address 08
+2109   ; STORE result into address 09
+1109   ; PRINT value at address 09
+4300   ; HALT program
+
+------------------------------------------------------
+
 Team Members:
-- Corbin Beus
+-------------
 - Daniel Urling
 - Michael Findlay
 - Traedon Harris
