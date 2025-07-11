@@ -1,49 +1,106 @@
-UVSim Milestone 3
+UVSim Milestone 4
 =================
 
-Description:
-------------
-This Project simulates Memory & Processor functions. It will take BasicML instructions in a .txt file.
-The Program GUI allows Reading and Writing of .txt instructions. Saving and Running in a local console.
+##  Overview
 
-📁 UVSimClassLib
-- CPU.cs (Handles Instruction Execution & I/O)
-- Register.cs (Parses and stores instruction values)
-- TraversableRegister.cs (Uses Next & Prev pointers for Traversal.) 
-- UVSim.cs (Constrols the instruction cycle (Fetch -> Decode -> Execute))
+UVSim is a virtual machine simulator designed for educational use. It executes BasicML (Basic Machine Language) programs and visually simulates memory, instructions, and execution cycles via a user-friendly GUI built with .NET MAUI.
 
-THIS IS A MAC OS PROGRAM ONLY
------------------------------
- **How to run the Program**
+This version includes:
+- A graphical editor for BasicML programs
+- A real-time console
+- File loading, editing, and saving capabilities
+- Customizable color themes
+- Visual file explorer for .txt programs
+- Simulated input/output (I/O)
 
-1. Requirements
-The following must be installed in order to run the program:
+---
 
-- .NET SDK 6.0 or later
+##  How to Run the Program
 
-2. Download the proper .zip file for your OS
+###  Requirements
+- .NET 8.0 SDK  
+- Visual Studio 2022+ with MAUI workload installed
 
-3. Open terminal and go to downloads directory
+###  Supported Platforms
+-  macOS
+-  Windows
+-  iOS & Android (via simulator/emulator)
 
-4. Unzip file and enter file
+###  Steps to Launch
+1. Clone or download the repository.
+2. Open the solution in **Visual Studio**.
+3. Select the correct platform (MacCatalyst, Windows, Android, etc.).
+4. Build and run the project.
 
-> unzip <file-name>.zip && cd <file-name>
+---
 
-5. Grant permissions to run executable file
+##  GUI Workflow
 
-> chmod +x UVSimGUI
+###  File Explorer
+- Located on the right side.
+- Lists `.txt` files in a selected folder.
+- Click a file to load it into the **Instructions Editor**.
+- Use the `Load Folder` option to populate the list.
 
-6. Run UVSimGUI 
+###  Instructions Editor
+- Enter or edit BasicML instructions (max 100 lines).
+- Line numbers displayed for easy reference.
+- Changes trigger recompilation.
 
-> ./UVSimGUI <full path to file>
+###  Buttons and Features
 
-You can also leave file path blank and in that case you will then be asked to input the path to your instructions file (ex: text1.txt)
+| Button         | Purpose                                                                 |
+|----------------|-------------------------------------------------------------------------|
+| `Load`         | Opens a file picker to load a `.txt` file into the editor.              |
+| `Write`        | Saves all loaded file tabs to disk (including edits).                   |
+| `Compile`      | Parses and loads the instructions into virtual memory.                  |
+| `Run`          | Executes instructions line-by-line and shows output in the console.     |
+| `Apply Theme`  | Updates the GUI color scheme using two HEX fields.                      |
 
-The Program will then execute the instructions line by line as written.
+---
 
-===================
-Team Members:
-- Corbin Beus
-- Daniel Urling
-- Michael Findlay
+##  User Input
+
+Some instructions (like `READ`) will prompt for input in the console:
+
+- A text entry field will appear under `Console`.
+- **Type an integer and press Enter** to submit.
+- Invalid input will display an error below.
+
+---
+
+##  Themes
+
+Users can customize the color scheme:
+- `Primary Color`: Used for headers, console background, etc.
+- `Off Color`: Used for buttons and text areas.
+
+Input HEX values and click `Apply Theme`.
+
+You can also toggle an **inverse mode** that switches foreground and background colors.
+
+---
+
+##  Files Overview
+
+###  UVSimClassLib
+
+- `CPU.cs`: Executes individual instructions.
+- `Register.cs`: Basic register model with string parsing.
+- `TraversableRegister.cs`: Linked-memory style structure for navigation.
+- `UVSim.cs`: Controls the instruction cycle and handles compilation.
+
+###  UVSimGUI
+
+- `MainPage.xaml`: Defines the GUI layout and styling.
+- `MainPage.xaml.cs`: Implements event logic and user interactions.
+- `ThemeColors.cs`: Manages persistent theming and config loading/saving.
+- `AppShell.xaml`: Shell configuration (routes & navigation).
+
+---
+
+##  Team Members
+ 
+- Daniel Urling  
+- Michael Findlay  
 - Traedon Harris
