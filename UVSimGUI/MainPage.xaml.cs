@@ -258,21 +258,36 @@ public partial class MainPage : ContentPage
 
     private void UpdateTheme(string primaryHex, string offHex)
     {
-        Theme.PrimaryHex = primaryHex;
-        Theme.OffHex = offHex;
+        if (!ThemeColors.IsValidHex(primaryHex) || !ThemeColors.IsValidHex(offHex))
+        {
+            Theme.PrimaryHex = "#4C721D";
+            Theme.OffHex = "#FFFFFF";
+            AddToConsole("⚠ Invalid HEX code. Reverting to default theme (UVU green/white).", Colors.Orange);
+        }
+        else
+        {
+            Theme.PrimaryHex = primaryHex;
+            Theme.OffHex = offHex;
+            AddToConsole($"Theme updated to {primaryHex} / {offHex}", Colors.LightGreen);
+        }
+
         Theme.Save();
 
         Resources["PrimaryColor"] = Theme.Primary;
         Resources["OffColor"] = Theme.Off;
-
-        AddToConsole($"Theme updated to {primaryHex} / {offHex}", Colors.LightGreen);
     }
+
 
     private void OnThemeToggled(object sender, ToggledEventArgs e)
     {
+        if (!ThemeColors.IsValidHex(Theme.PrimaryHex) || !ThemeColors.IsValidHex(Theme.OffHex))
+        {
+            AddToConsole("⚠ Cannot invert theme: Invalid HEX codes. Reverting to default.", Colors.Red);
+            UpdateTheme("#4C721D", "#FFFFFF");
+            return;
+        }
         string primaryHex = InverseColor(Theme.PrimaryHex);
         string offHex = InverseColor(Theme.OffHex);
-        
         UpdateTheme(primaryHex, offHex);
     }
 

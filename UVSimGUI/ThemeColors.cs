@@ -1,5 +1,6 @@
 ﻿using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Storage;
+using System.IO;
 
 namespace UVSimGUI;
 
@@ -44,7 +45,8 @@ public class ThemeColors
 
         return new ThemeColors();
     }
-    private bool IsValidHex(string hex)
+
+    public static bool IsValidHex(string hex)
     {
         return !string.IsNullOrWhiteSpace(hex) &&
                hex.StartsWith("#") &&
@@ -52,3 +54,4 @@ public class ThemeColors
                int.TryParse(hex[1..], System.Globalization.NumberStyles.HexNumber, null, out _);
     }
 }
+
