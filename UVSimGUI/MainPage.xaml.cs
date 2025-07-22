@@ -23,7 +23,7 @@ public partial class MainPage : ContentPage
     const string DefaultFileName = "CustomBasicML.txt";
     bool Compiled = false;
     UVSim UVSim = new UVSim();
-    private const int MaxLines = 100;
+    private const int MaxLines = 250;
     private bool _isUpdating = false;
     private bool _isScrolling = false;
     private double _lastScrollPosition = 0;
