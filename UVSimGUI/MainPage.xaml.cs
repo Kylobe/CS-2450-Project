@@ -141,7 +141,7 @@ public partial class MainPage : ContentPage
 
     private void PopulateLineNum()
     {
-        LineNumberLabel.Text = string.Join(Environment.NewLine, Enumerable.Range(1, MaxLines));
+        LineNumberLabel.Text = string.Join(Environment.NewLine, Enumerable.Range(0, MaxLines).Select(i => i.ToString("D2")));
     }
     private async void OnLoadClicked(object sender, EventArgs e)
     {

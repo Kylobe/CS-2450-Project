@@ -78,7 +78,7 @@
                                             FontFamily="Courier New"
                                             FontSize="14"
                                             TextColor="Gray"
-                                            Text="1"
+                                            Margin="0,6,0,0"
                                             VerticalOptions="Start"/>
                                     </ScrollView>
 
