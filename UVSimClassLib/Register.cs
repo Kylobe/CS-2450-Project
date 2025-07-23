@@ -14,13 +14,13 @@ public class Register
         set
         {
             int curVal = value;
-            while (Math.Abs(curVal) > 9999)
+            while (Math.Abs(curVal) > 999999)
             {
-                curVal -= 10000;
+                curVal -= 1000000;
             }
-            string valStr = Math.Abs(curVal).ToString().PadLeft(4, '0');
-            FirstHalf = valStr.Substring(0, 2);
-            SecondHalf = valStr.Substring(2, 2);
+            string valStr = Math.Abs(curVal).ToString();
+            FirstHalf = valStr.Substring(0, valStr.Length / 2).PadLeft(3,'0');
+            SecondHalf = valStr.Substring(valStr.Length / 2, valStr.Length / 2).PadLeft(3, '0');
             regVal = curVal;
         }
     }

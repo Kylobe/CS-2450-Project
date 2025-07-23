@@ -8,9 +8,10 @@ namespace UVSimClassLib
     public class UVSim
     {
         public TraversableRegister[] MainMemory = new TraversableRegister[100];
-        public Register Accumulator = new Register("0000");
+        public Register Accumulator = new Register("000000");
         private CPU CPU { get; set; }
         private bool Done { get; set; } = false;
+        private int MaxRegister { get; } = 249;
 
         public UVSim()
         {
@@ -42,13 +43,13 @@ namespace UVSimClassLib
             try
             {
                 int lineVal = int.Parse(line);
-                if (Math.Abs(lineVal) <= 9999)
+                if (Math.Abs(lineVal) <= 999999)
                 {
                     return true;
                 }
                 else
                 {
-                    errorMessage = line + " must contain 4 or less digits";
+                    errorMessage = line + " must contain 6 or less digits";
                     return false;
                 }
             }
@@ -87,7 +88,7 @@ namespace UVSimClassLib
             for (int i = 0; i < MainMemory.Length; i++)
             {
                 if (i >= numbers.Length)
-                    MainMemory[i] = new TraversableRegister("0000");
+                    MainMemory[i] = new TraversableRegister("000000");
                 else
                     MainMemory[i] = new TraversableRegister(numbers[i]);
             }
@@ -104,7 +105,7 @@ namespace UVSimClassLib
                 }
                 else
                 {
-                    TraversableRegister head = new TraversableRegister("0000");
+                    TraversableRegister head = new TraversableRegister("000000");
                     MainMemory[i].Prev = head;
                     head.Next = MainMemory[i];
                 }
@@ -117,42 +118,54 @@ namespace UVSimClassLib
             Done = false;
             while (!Done)
             {
+                Console.Write(currentRegister.FirstHalf);
                 switch (currentRegister.FirstHalf)
-                {
-                case "10":
-                    await CPU.Read(int.Parse(currentRegister.SecondHalf), mockConsole);
+            {
+                case "010":
+                    if (int.Parse(currentRegister.SecondHalf) <= MaxRegister)
+                        await CPU.Read(int.Parse(currentRegister.SecondHalf), mockConsole);
                     break;
-                case "11":
-                    CPU.Write(int.Parse(currentRegister.SecondHalf), mockConsole);
+                case "011":
+                    if (int.Parse(currentRegister.SecondHalf) <= MaxRegister)
+                        CPU.Write(int.Parse(currentRegister.SecondHalf), mockConsole);
                     break;
-                case "20":
-                    CPU.Load(int.Parse(currentRegister.SecondHalf));
+                case "020":
+                    if (int.Parse(currentRegister.SecondHalf) <= MaxRegister)
+                        CPU.Load(int.Parse(currentRegister.SecondHalf));
                     break;
-                case "21":
-                    CPU.Store(int.Parse(currentRegister.SecondHalf));
+                case "021":
+                    if (int.Parse(currentRegister.SecondHalf) <= MaxRegister)
+                        CPU.Store(int.Parse(currentRegister.SecondHalf));
                     break;
-                case "30":
-                    CPU.Add(int.Parse(currentRegister.SecondHalf));
+                case "030":
+                    if (int.Parse(currentRegister.SecondHalf) <= MaxRegister)
+                        CPU.Add(int.Parse(currentRegister.SecondHalf));
                     break;
-                case "31":
-                    CPU.Subtract(int.Parse(currentRegister.SecondHalf));
+                case "031":
+                    if (int.Parse(currentRegister.SecondHalf) <= MaxRegister)
+                        CPU.Subtract(int.Parse(currentRegister.SecondHalf));
                     break;
-                case "32":
-                    CPU.Divide(int.Parse(currentRegister.SecondHalf));
+                case "032":
+                    if (int.Parse(currentRegister.SecondHalf) <= MaxRegister)
+                        CPU.Divide(int.Parse(currentRegister.SecondHalf));
                     break;
-                case "33":
-                    CPU.Multiply(int.Parse(currentRegister.SecondHalf));
+                case "033":
+                    if (int.Parse(currentRegister.SecondHalf) <= MaxRegister)
+                        CPU.Multiply(int.Parse(currentRegister.SecondHalf));
                     break;
-                case "40":
-                    currentRegister = CPU.Branch(currentRegister);
+                case "040":
+                    if (int.Parse(currentRegister.SecondHalf) <= MaxRegister)
+                        currentRegister = CPU.Branch(currentRegister);
                     break;
-                case "41":
-                    currentRegister = CPU.BranchNeg(currentRegister);
+                case "041":
+                    if (int.Parse(currentRegister.SecondHalf) <= MaxRegister)
+                        currentRegister = CPU.BranchNeg(currentRegister);
                     break;
-                case "42":
-                    currentRegister = CPU.BranchZero(currentRegister);
+                case "042":
+                    if (int.Parse(currentRegister.SecondHalf) <= MaxRegister)
+                        currentRegister = CPU.BranchZero(currentRegister);
                     break;
-                case "43":
+                case "043":
                     currentRegister = CPU.Halt(currentRegister);
                     break;
             }
