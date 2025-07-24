@@ -11,24 +11,19 @@ public class CPU
         Accumulator = accumulator;
     }
     // all commands
-    public async Task Read(int memoryAddress, VerticalStackLayout mockConsole)
+    public async Task Read(int memoryAddress, ConsoleManager mockConsole)
     {
-        int input = await GetUserInputAsync(mockConsole);
+        int input = await mockConsole.GetUserInputAsync();
         //Store in memory 
         MainMemory[memoryAddress].RegVal = input;
 
     }
-    public void Write(int memoryAddress, VerticalStackLayout mockConsole)
+    public void Write(int memoryAddress, ConsoleManager mockConsole)
     {
         //Output Value of the given address
         int value = MainMemory[memoryAddress].RegVal;
-        Label newLabel = new Label 
-        { 
-            Text = $"Value of memory {memoryAddress:D2}: {value}",
-            TextColor = Colors.Black,
-            FontSize = 14
-        };
-        mockConsole.Children.Add(newLabel);
+        string valStr = $"{value}";
+        mockConsole.AddToConsole(valStr, Colors.Black);
     }
     public void Load(int memoryAddress) 
     {
@@ -95,40 +90,5 @@ public class CPU
     {
         currentRegister.Next = null;
         return currentRegister;
-    }
-
-    private async Task<int> GetUserInputAsync(VerticalStackLayout mockConsole)
-    {
-        var tcs = new TaskCompletionSource<int>();
-
-        Entry inputEntry = new Entry()
-        {
-            FontSize = 16,
-            Placeholder = "waiting for user input",
-        };
-        
-        mockConsole.Children.Add(inputEntry);
-        
-        inputEntry.Completed += (sender, e) =>
-        {
-            if (int.TryParse(inputEntry.Text, out int result))
-            {
-                tcs.TrySetResult(result);
-            }
-            else
-            {
-                var errorLabel = new Label
-                {
-                    Text = "Invalid input. Please enter an integer.",
-                    TextColor = Colors.Red,
-                    FontSize = 14
-                };
-                mockConsole.Children.Add(errorLabel);
-            }
-        };
-        
-        int input = await tcs.Task;
-
-        return input;
     }
 }
