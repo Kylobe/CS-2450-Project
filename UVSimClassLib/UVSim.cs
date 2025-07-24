@@ -112,7 +112,7 @@ namespace UVSimClassLib
             }
         }
 
-        public async Task Run(VerticalStackLayout mockConsole)
+        public async Task Run(ConsoleManager mockConsole)
         {
             TraversableRegister currentRegister = MainMemory[0];
             Done = false;

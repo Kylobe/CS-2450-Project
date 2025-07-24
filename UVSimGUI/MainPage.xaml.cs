@@ -23,6 +23,7 @@ public partial class MainPage : ContentPage
     const string DefaultFileName = "CustomBasicML.txt";
     bool Compiled = false;
     UVSim UVSim = new UVSim();
+    private ConsoleManager consoleManager;
     private const int MaxLines = 250;
     private bool _isUpdating = false;
     private bool _isScrolling = false;
@@ -34,6 +35,7 @@ public partial class MainPage : ContentPage
     public MainPage()
     {
         InitializeComponent();
+        consoleManager = new ConsoleManager(MockConsole, ConsoleScrollView);
         Theme = ThemeColors.Load();
         BindingContext = this;
         PopulateLineNum();
@@ -66,16 +68,16 @@ public partial class MainPage : ContentPage
                 _activeFile.FullPath = newPath;
                 FileExplorerView.ItemsSource = null;
                 FileExplorerView.ItemsSource = Files;
-                AddToConsole($"Renamed to: {newPath}", Colors.Black);
+                consoleManager.AddToConsole($"Renamed to: {newPath}", Colors.Black);
             }
             else
             {
-                AddToConsole("Original file not found.", Colors.Orange);
+                consoleManager.AddToConsole("Original file not found.", Colors.Orange);
             }
         }
         catch (Exception ex)
         {
-            AddToConsole(ex.Message, Colors.Red);
+            consoleManager.AddToConsole(ex.Message, Colors.Red);
         }
     }
     private async void OnLoadFolderClicked(object sender, EventArgs e)
@@ -85,7 +87,7 @@ public partial class MainPage : ContentPage
             var pickResult = await FolderPicker.Default.PickAsync(CancellationToken.None);
             if (!pickResult.IsSuccessful)
             {
-                AddToConsole($"Folder pick cancelled or failed: {pickResult.Exception?.Message}", Colors.Orange);
+                consoleManager.AddToConsole($"Folder pick cancelled or failed: {pickResult.Exception?.Message}", Colors.Orange);
                 return;
             }
 
@@ -95,7 +97,7 @@ public partial class MainPage : ContentPage
 
             if (txtFiles.Length == 0)
             {
-                AddToConsole("No .txt files found in the selected folder.", Colors.Orange);
+                consoleManager.AddToConsole("No .txt files found in the selected folder.", Colors.Orange);
                 return;
             }
 
@@ -106,12 +108,12 @@ public partial class MainPage : ContentPage
                 Files.Add(new FileDisplay(new FileResult(filePath)));
             }
 
-            AddToConsole($"Loaded {txtFiles.Length} file(s) from {_folderPath}.", Colors.Black);
+            consoleManager.AddToConsole($"Loaded {txtFiles.Length} file(s) from {_folderPath}.", Colors.Black);
             Compiled = false;
         }
         catch (Exception ex)
         {
-            AddToConsole(ex.Message, Colors.Red);
+            consoleManager.AddToConsole(ex.Message, Colors.Red);
         }
     }
     private async void OnFileSelected(object sender, SelectionChangedEventArgs e)
@@ -135,7 +137,7 @@ public partial class MainPage : ContentPage
         }
         catch (Exception ex)
         {
-            AddToConsole(ex.Message, Colors.Red);
+            consoleManager.AddToConsole(ex.Message, Colors.Red);
         }
     }
 
@@ -170,13 +172,13 @@ public partial class MainPage : ContentPage
                 using var reader = new StreamReader(stream);
                 InstructionsEditor.Text = await reader.ReadToEndAsync();
                 Files.Add(new FileDisplay(result));
-                AddToConsole($"Added file: {result.FileName}", Colors.Yellow);
+                consoleManager.AddToConsole($"Added file: {result.FileName}", Colors.Yellow);
                 Compiled = false;
             }
         }
         catch (Exception ex)
         {
-            AddToConsole(ex.Message, Colors.Red);
+            consoleManager.AddToConsole(ex.Message, Colors.Red);
         }
     }
 
@@ -214,7 +216,7 @@ public partial class MainPage : ContentPage
         }
         catch (Exception ex)
         {
-            AddToConsole(ex.Message, Colors.Red);
+            consoleManager.AddToConsole(ex.Message, Colors.Red);
         }
     }
     private async Task SaveSilentlyAsync(string folderPath, string fileName, string text)
@@ -223,7 +225,7 @@ public partial class MainPage : ContentPage
         var fullPath = Path.Combine(folderPath, fileName);
 
         await File.WriteAllTextAsync(fullPath, text);
-        AddToConsole($"Saved to: {fullPath}", Colors.Black);
+        consoleManager.AddToConsole($"Saved to: {fullPath}", Colors.Black);
     }
     private async void OnCompileClicked(object sender, EventArgs e)
     {
@@ -232,11 +234,11 @@ public partial class MainPage : ContentPage
             string[] lines = InstructionsEditor.Text.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries);
             UVSim.LoadArray(lines);
             Compiled = true;
-            AddToConsole("Compiled!", Colors.Black);
+            consoleManager.AddToConsole("Compiled!", Colors.Black);
         }
         catch (Exception ex)
         {
-            AddToConsole(ex.Message, Colors.Red);
+            consoleManager.AddToConsole(ex.Message, Colors.Red);
         }
     }
 
@@ -247,12 +249,12 @@ public partial class MainPage : ContentPage
             if (!Compiled)
                 throw new Exception("Please compile before run");
 
-            await UVSim.Run(MockConsole);
-            AddToConsole("Run Success!", Colors.Black);
+            await UVSim.Run(consoleManager);
+            consoleManager.AddToConsole("Run Success!", Colors.Black);
         }
         catch (Exception ex)
         {
-            AddToConsole(ex.Message, Colors.Red);
+            consoleManager.AddToConsole(ex.Message, Colors.Red);
         }
     }
 
@@ -262,13 +264,13 @@ public partial class MainPage : ContentPage
         {
             Theme.PrimaryHex = "#4C721D";
             Theme.OffHex = "#FFFFFF";
-            AddToConsole("⚠ Invalid HEX code. Reverting to default theme (UVU green/white).", Colors.Orange);
+            consoleManager.AddToConsole("⚠ Invalid HEX code. Reverting to default theme (UVU green/white).", Colors.Orange);
         }
         else
         {
             Theme.PrimaryHex = primaryHex;
             Theme.OffHex = offHex;
-            AddToConsole($"Theme updated to {primaryHex} / {offHex}", Colors.LightGreen);
+            consoleManager.AddToConsole($"Theme updated to {primaryHex} / {offHex}", Colors.LightGreen);
         }
 
         Theme.Save();
@@ -282,7 +284,7 @@ public partial class MainPage : ContentPage
     {
         if (!ThemeColors.IsValidHex(Theme.PrimaryHex) || !ThemeColors.IsValidHex(Theme.OffHex))
         {
-            AddToConsole("⚠ Cannot invert theme: Invalid HEX codes. Reverting to default.", Colors.Red);
+            consoleManager.AddToConsole("⚠ Cannot invert theme: Invalid HEX codes. Reverting to default.", Colors.Red);
             UpdateTheme("#4C721D", "#FFFFFF");
             return;
         }
@@ -314,26 +316,13 @@ public partial class MainPage : ContentPage
             }
             catch (Exception ex)
             {
-                AddToConsole($"Invalid color format: {ex.Message}", Colors.Red);
+                consoleManager.AddToConsole($"Invalid color format: {ex.Message}", Colors.Red);
             }
         }
         else
         {
-            AddToConsole("Please enter both primary and off colors.", Colors.Orange);
+            consoleManager.AddToConsole("Please enter both primary and off colors.", Colors.Orange);
         }
-    }
-
-    private async void AddToConsole(string message, Color textColor)
-    {
-        Label newLabel = new Label
-        {
-            Text = message,
-            TextColor = textColor,
-            FontSize = 14
-        };
-        MockConsole.Add(newLabel);
-        await Task.Delay(50);
-        await ConsoleScrollView.ScrollToAsync(MockConsole, ScrollToPosition.End, false);
     }
 }
 
