@@ -49,6 +49,7 @@ namespace UVSimClassLib
                 if (int.TryParse(inputEntry.Text, out int result))
                 {
                     tcs.TrySetResult(result);
+                    inputEntry.IsEnabled = false;
                 }
                 else
                 {
