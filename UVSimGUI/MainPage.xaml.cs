@@ -323,7 +323,7 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private void AddToConsole(string message, Color textColor)
+    private async void AddToConsole(string message, Color textColor)
     {
         Label newLabel = new Label
         {
@@ -332,7 +332,8 @@ public partial class MainPage : ContentPage
             FontSize = 14
         };
         MockConsole.Add(newLabel);
-        ConsoleScrollView.ScrollToAsync(MockConsole, ScrollToPosition.End, false);
+        await Task.Delay(50);
+        await ConsoleScrollView.ScrollToAsync(MockConsole, ScrollToPosition.End, false);
     }
 }
 

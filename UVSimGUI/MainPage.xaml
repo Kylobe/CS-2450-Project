@@ -102,14 +102,33 @@
                             </VerticalStackLayout>
                         </ScrollView>
                     </Frame>
+                    <Frame CornerRadius="10"
+                        Padding="0"
+                        BackgroundColor="{DynamicResource PrimaryColor}"
+                        HeightRequest="200">
 
-                    <!-- Second scrollable section -->
-                    <Frame CornerRadius="10" Padding="10" BackgroundColor="{DynamicResource PrimaryColor}" BindingContext="{Binding MockConsole}" HeightRequest="200">
-                        <ScrollView x:Name="ConsoleScrollView">
-                            <VerticalStackLayout Spacing="10" x:Name="MockConsole">
-                                <Label Text="Console" FontAttributes="Bold" FontSize="16" />
-                            </VerticalStackLayout>
-                        </ScrollView>
+                        <!-- Fixed layout container inside the Frame -->
+                        <Grid RowDefinitions="Auto,*">
+
+                            <!-- Fixed Header -->
+                            <Label Text="Console"
+                                FontAttributes="Bold"
+                                FontSize="16"
+                                HorizontalOptions="Center"
+                                Margin="10"
+                                Grid.Row="0" />
+
+                            <!-- Scrollable Content -->
+                            <ScrollView x:Name="ConsoleScrollView"
+                                Orientation="Vertical"
+                                Grid.Row="1"
+                                VerticalScrollBarVisibility="Always"
+                                Margin="10,0,10,10">
+                                <VerticalStackLayout x:Name="MockConsole" Spacing="5">
+                                    <!-- Additional console messages can go here -->
+                                </VerticalStackLayout>
+                            </ScrollView>
+                        </Grid>
                     </Frame>
                 </VerticalStackLayout>
 
