@@ -114,6 +114,7 @@ namespace UVSimClassLib
 
         public async Task Run(ConsoleManager mockConsole)
         {
+            Accumulator.RegVal = 0;
             TraversableRegister currentRegister = MainMemory[0];
             Done = false;
             while (!Done)
