@@ -59,6 +59,7 @@ File Explorer:
 
 Buttons and Their Functions:
 ----------------------------
+Apply Theme:  Sets new theme colors based on two HEX input fields.
 Toggle:       Toggles the theme primary and secondary colors by inverting their hex.
 File:         Opens a file picker to load a `.txt` file into the editor.
 Folder:       Opens a file picker to load a folder with '.txt' files autoloaded into the editor.
@@ -66,7 +67,6 @@ Rename:       Rename the file that you have selected.
 Write:        Saves all currently loaded and edited files back to disk.
 Compile:      Parses and validates instructions, loading them into memory.
 Run:          Executes instructions line by line. Output appears in the console.
-Apply Theme:  Sets new theme colors based on two HEX input fields.
 
 ------------------------------------------------------
 
@@ -92,6 +92,19 @@ To apply a theme:
 3. Optionally use the toggle to invert the theme.
 
 Themes are saved to disk and persist between sessions.
+
+------------------------------------------------------
+
+RGB Hex values to use:
+--------------------
+Primary                 Secondary
+Blue - #007BFF          Light Gray - #F8F9FA
+Red - #DC3545           Light Red - #F8D7DA
+Green - #28A745         Light Green - #D3F9D8
+Yellow - #FFC107        Light Yellow - #FFF3CD
+Orange - #FD7E14        Light Teal - #C3FAE8
+Purple - #6F42C1        Light Purple - #E0BBE4
+Teal - #20C997          Gray - #6C757D
 
 ------------------------------------------------------
 
