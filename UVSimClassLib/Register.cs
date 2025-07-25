@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace UVSimClassLib;
 
 public class Register
@@ -5,6 +7,7 @@ public class Register
     public string FirstHalf { get; set; } 
     public string SecondHalf { get; set; }
     private int regVal;
+    private string valStr;
     public int RegVal
     {
         get
@@ -18,22 +21,23 @@ public class Register
             {
                 curVal -= 1000000;
             }
-            string valStr = Math.Abs(curVal).ToString();
-            FirstHalf = valStr.Substring(0, valStr.Length / 2).PadLeft(3,'0');
-            SecondHalf = valStr.Substring(valStr.Length / 2, valStr.Length / 2).PadLeft(3, '0');
             regVal = curVal;
+            valStr = FirstHalf + SecondHalf;
         }
     }
     public Register(string value)
     {
+        value = Regex.Replace(value, @"[+-]", "");
+        FirstHalf = value.Substring(0, value.Length / 2).PadLeft(3,'0');
+        SecondHalf = value.Substring(value.Length / 2 , value.Length / 2 ).PadLeft(3, '0');
         RegVal = int.Parse(value);
     }
     public override string ToString()
     {
-        if (RegVal > 0)
+        if (RegVal < 0)
         {
-            return "+" + FirstHalf + SecondHalf;
+            return "-" + valStr;
         }
-        return "-" + FirstHalf + SecondHalf;
+        return "+" + valStr;
     }
 }
