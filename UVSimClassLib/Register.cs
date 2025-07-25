@@ -30,6 +30,10 @@ public class Register
     }
     public override string ToString()
     {
-        return RegVal.ToString();
+        if (RegVal > 0)
+        {
+            return "+" + FirstHalf + SecondHalf;
+        }
+        return "-" + FirstHalf + SecondHalf;
     }
 }
