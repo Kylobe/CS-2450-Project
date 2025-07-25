@@ -132,6 +132,7 @@ public partial class MainPage : ContentPage
             else
             {
                 InstructionsEditor.Text = await File.ReadAllTextAsync(_activeFile.FullPath);
+                _activeFile.FileText = InstructionsEditor.Text;
             }
             Compiled = false;
         }
@@ -171,7 +172,10 @@ public partial class MainPage : ContentPage
                 using var stream = await result.OpenReadAsync();
                 using var reader = new StreamReader(stream);
                 InstructionsEditor.Text = await reader.ReadToEndAsync();
-                Files.Add(new FileDisplay(result));
+                FileDisplay loadedFile = new FileDisplay(result);
+                loadedFile.FileText = InstructionsEditor.Text;
+                _activeFile = loadedFile;
+                Files.Add(loadedFile);
                 consoleManager.AddToConsole($"Added file: {result.FileName}", Colors.Yellow);
                 Compiled = false;
             }
