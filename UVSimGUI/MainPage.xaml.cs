@@ -233,8 +233,9 @@ public partial class MainPage : ContentPage
         {
             string[] lines = InstructionsEditor.Text.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries);
             UVSim.LoadArray(lines);
-            Compiled = true;
+            InstructionsEditor.Text = String.Join(Environment.NewLine, UVSim.MainMemory.Select(i => i.ToString()));
             consoleManager.AddToConsole("Compiled!", Colors.Black);
+            Compiled = true;
         }
         catch (Exception ex)
         {
