@@ -28,8 +28,8 @@ public class Register
     public Register(string value)
     {
         value = Regex.Replace(value, @"[+-]", "");
-        FirstHalf = value.Substring(0, value.Length / 2).PadLeft(3,'0');
-        SecondHalf = value.Substring(value.Length / 2 , value.Length / 2 ).PadLeft(3, '0');
+        FirstHalf = value.Substring(0, (value.Length / 2) + (value.Length % 2) ).PadLeft(3,'0');
+        SecondHalf = value.Substring((value.Length / 2) + (value.Length % 2) , value.Length / 2 );
         RegVal = int.Parse(value);
     }
     public override string ToString()
