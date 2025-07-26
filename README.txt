@@ -11,6 +11,7 @@ This version includes:
 - Visual file explorer for .txt programs
 - File loading, editing, renaming, and saving
 - Customizable theme support with persistent config
+- Support for both 6 digit BasicML instruction and conversion from 4 digit to 6 digit instruction
 
 IMPORTANT:
 ----------
@@ -44,7 +45,7 @@ GUI Workflow and Controls:
 --------------------------
 
 Instructions Editor:
-- Enter or paste up to 100 BasicML instructions.
+- Enter or paste up to 250 BasicML instructions.
 - Editor automatically shows line numbers for clarity.
 - Instructions are validated and compiled into memory.
 
@@ -52,15 +53,20 @@ File Explorer:
 - Located on the right side of the GUI.
 - Lists all `.txt` files in a selected folder.
 - Click a file to load its contents into the editor.
+- Any changes made in a file editor will be temporarily saved while switching between files.
+  If you need the changes to be saved permenantly, just be sure to click 'write'. 
 - Files can also be renamed (feature available if wired).
 
 Buttons and Their Functions:
 ----------------------------
-Load:         Opens a file picker to load a `.txt` file into the editor.
+Apply Theme:  Sets new theme colors based on two HEX input fields.
+Toggle:       Toggles the theme primary and secondary colors by inverting their hex.
+File:         Opens a file picker to load a `.txt` file into the editor.
+Folder:       Opens a file picker to load a folder with '.txt' files autoloaded into the editor.
+Rename:       Rename the file that you have selected.
 Write:        Saves all currently loaded and edited files back to disk.
 Compile:      Parses and validates instructions, loading them into memory.
 Run:          Executes instructions line by line. Output appears in the console.
-Apply Theme:  Sets new theme colors based on two HEX input fields.
 
 ------------------------------------------------------
 
@@ -86,6 +92,30 @@ To apply a theme:
 3. Optionally use the toggle to invert the theme.
 
 Themes are saved to disk and persist between sessions.
+
+------------------------------------------------------
+
+RGB Hex values to use:
+--------------------
+Primary                 Secondary
+Blue - #007BFF          Light Gray - #F8F9FA
+Red - #DC3545           Light Red - #F8D7DA
+Green - #28A745         Light Green - #D3F9D8
+Yellow - #FFC107        Light Yellow - #FFF3CD
+Orange - #FD7E14        Light Teal - #C3FAE8
+Purple - #6F42C1        Light Purple - #E0BBE4
+Teal - #20C997          Gray - #6C757D
+
+------------------------------------------------------
+
+4 digit file support
+--------------------
+We do support 4 digit files. When you compile your program, the editor will update the 
+4 digit instructions to 0XXXX format. This way we can still expect the same 3 digit 
+instructions as when we have six digits without changing the numeric value. 
+
+This means 1002 will be changed to 01002 so that '010' can be seen as a command, but
+still allow 1002 to be the numeric value in any mathmatic operations. 
 
 ------------------------------------------------------
 
