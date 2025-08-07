@@ -193,7 +193,6 @@ public partial class MainPage : ContentPage
         _isUpdating = true;
         try
         {
-            Compiled = false;
             string[] lines = InstructionsEditor.Text?.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None) ?? Array.Empty<string>();
 
             if (lines.Length > MaxLines)
