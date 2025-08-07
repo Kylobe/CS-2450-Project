@@ -7,7 +7,7 @@ namespace UVSimClassLib
 {
     public class UVSim
     {
-        public TraversableRegister[] MainMemory = new TraversableRegister[100];
+        public TraversableRegister[] MainMemory = new TraversableRegister[249];
         public Register Accumulator = new Register("000000");
         private CPU CPU { get; set; }
         private bool Done { get; set; } = false;
